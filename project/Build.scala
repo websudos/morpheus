@@ -11,7 +11,7 @@ object Build extends Build {
   val FinaglePostgres = "0.1.0-SNAPSHOT"
   val FinagleZkVersion = "6.24.0"
   val ShapelessVersion = "2.2.4"
-  val DieselEngineVersion = "0.2.3"
+  val DieselEngineVersion = "0.2.2"
 
   val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
     publishMavenStyle := true,

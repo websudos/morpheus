@@ -26,8 +26,6 @@ import com.websudos.morpheus.column.AbstractColumn
 import com.websudos.morpheus.query._
 
 import com.websudos.morpheus.{ Row => BaseRow, Result => BaseResult }
-import org.slf4j.LoggerFactory
-
 
 case class MySQLResult(result: FinagleResult) extends BaseResult {}
 
@@ -110,10 +108,8 @@ case class MySQLRow(res: FinagleRow) extends BaseRow {
 
 class MySQLClient(val client: FinagleClient) extends Client[MySQLRow, MySQLResult] {
 
-  lazy val logger = LoggerFactory.getLogger(getClass.getName.stripSuffix("$"))
-
   def select[T](qb: String)(f: MySQLRow => T): Future[Seq[T]] = {
-    logger.info(s"Executing query $qb")
+    // logger.info(s"Executing query $qb")
     client.query(qb).map {
       case set: FinagleResultSet => set.rows.map {
         row => f(new MySQLRow(row))
@@ -123,12 +119,10 @@ class MySQLClient(val client: FinagleClient) extends Client[MySQLRow, MySQLResul
   }
 
   def query(query: String): Future[MySQLResult] = {
-    logger.info(s"Executing query $query")
     client.query(query).map { res => MySQLResult(res) }
   }
 
 }
-
 
 object MySQLSyntax extends AbstractSQLSyntax {
 
