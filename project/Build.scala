@@ -16,7 +16,7 @@ object Build extends Build {
   val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
     publishMavenStyle := true,
     bintray.BintrayKeys.bintrayOrganization := Some("websudos"),
-    bintray.BintrayKeys.bintrayRepository := "oss-releases",
+    bintray.BintrayKeys.bintrayRepository := "internal-releases",
     bintray.BintrayKeys.bintrayReleaseOnPublish := true,
     publishArtifact in (Compile, packageSrc) := false,
     publishArtifact in (Test, packageSrc) := false,
@@ -69,7 +69,7 @@ object Build extends Build {
 
   val sharedSettings: Seq[Def.Setting[_]] = Seq(
     organization := "com.websudos",
-    version := "0.2.0",
+    version := "0.2.1",
     scalaVersion := "2.10.5",
     crossScalaVersions := Seq("2.10.5", "2.11.6"),
     resolvers ++= Seq(
@@ -139,9 +139,7 @@ object Build extends Build {
   ).settings(
     name := "morpheus-mysql",
     libraryDependencies ++= Seq(
-      "com.twitter"                  %% "finagle-mysql"                     % FinagleVersion excludeAll (
-        ExclusionRule("org.scala-lang", "scala-reflect")
-      )
+      "com.twitter"                  %% "finagle-mysql"                     % FinagleVersion % "test, compile"
     )
   ).dependsOn(
     morpheusDsl,

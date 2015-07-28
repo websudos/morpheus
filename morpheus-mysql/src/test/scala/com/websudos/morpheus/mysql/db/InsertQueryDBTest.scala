@@ -36,7 +36,7 @@ class InsertQueryDBTest extends FlatSpec with MySQLSuite with BeforeAndAfterAll 
     val sample = gen[BasicRecord]
 
     val chain = for {
-      store <- BasicTable.insert.value(_.name, sample).value(_.count, sample.count).future()
+      store <- BasicTable.insert.value(_.name, sample.name).value(_.count, sample.count).future()
       get <- BasicTable.select.where(_.name eqs sample.name).one()
     } yield get
 
