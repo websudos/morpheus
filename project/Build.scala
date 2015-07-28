@@ -164,6 +164,7 @@ object Build extends Build {
   )
 
 
+/*
   lazy val morpheusZookeeper = Project(
     id = "morpheus-zookeeper",
     base = file("morpheus-zookeeper"),
@@ -187,7 +188,7 @@ object Build extends Build {
     )
   ).dependsOn(
     morpheusTestkit
-  )
+  )*/
 
   lazy val morpheusTestkit = Project(
     id = "morpheus-testkit",
