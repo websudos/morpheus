@@ -5,7 +5,7 @@ import sbt._
 
 object Build extends Build {
 
-  val UtilVersion = "0.9.8"
+  val UtilVersion = "0.9.9"
   val FinagleVersion = "6.25.0"
   val SparkVersion = "1.2.1"
   val FinaglePostgres = "0.1.0-SNAPSHOT"
@@ -81,10 +81,9 @@ object Build extends Build {
       "Sonatype staging"                 at "http://oss.sonatype.org/content/repositories/staging",
       "Java.net Maven2 Repository"       at "http://download.java.net/maven/2/",
       "Twitter Repository"               at "http://maven.twttr.com",
-      Resolver.bintrayRepo("websudos", "oss-releases")
+      Resolver.bintrayRepo("websudos", "internal-releases")
     ),
     scalacOptions ++= Seq(
-      "-Ylog-classpath",
       "-language:postfixOps",
       "-language:implicitConversions",
       "-language:reflectiveCalls",
