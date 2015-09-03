@@ -34,6 +34,8 @@ import com.websudos.morpheus.builder.DefaultSQLDataTypes
 import com.websudos.morpheus.dsl.BaseTable
 import com.websudos.morpheus.{Row, SQLPrimitive}
 
+import scala.util.{Failure, Success, Try}
+
 abstract class LimitedTextColumn[
   T <: BaseTable[T, R, TableRow],
   R, TableRow <: Row,
@@ -99,5 +101,41 @@ abstract class AbstractMediumBlobColumn[T <: BaseTable[T, R, TableRow], R, Table
 abstract class AbstractLongBlobColumn[T <: BaseTable[T, R, TableRow], R, TableRow <: Row](t: BaseTable[T, R, TableRow], limit: Int = 0)(implicit ev: SQLPrimitive[String])
   extends LimitedTextColumn[T, R, TableRow, String](t, limit) {
   override def sqlType: String = DefaultSQLDataTypes.longBlob
+}
+
+
+
+
+abstract class AbstractEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
+  extends Column[Owner, Record, TableRow, String](table) {
+
+  override def sqlType: String = DefaultSQLDataTypes.varchar
+}
+
+
+abstract class AbstractEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
+  extends Column[Owner, Record, TableRow, String](table) {
+
+  override def sqlType: String = DefaultSQLDataTypes.varchar
+}
+
+
+class OptionalEnumColumn[Owner <: BaseTable[Owner, Record], Record, EnumType <: Enumeration](table: CassandraTable[Owner, Record], enum: EnumType)
+  extends OptionalColumn[Owner, Record, EnumType#Value](table) {
+
+  def cassandraType: String = CQLSyntax.Types.Text
+
+  def optional(r: Row): Try[EnumType#Value] = {
+
+    val enumConstant = r.getString(name)
+
+    enum.values.find(_.toString == enumConstant) match {
+      case Some(value) => Success(value)
+      case None => Failure(new Exception(s"Enumeration ${enum.toString()} doesn't contain value $enumConstant"))
+    }
+  }
+
+  override def asCql(v: Option[EnumType#Value]) = v.map(item => CQLQuery.empty.singleQuote(item.toString)).orNull
+
 }
 

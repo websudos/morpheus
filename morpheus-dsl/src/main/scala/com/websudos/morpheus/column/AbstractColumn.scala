@@ -30,12 +30,17 @@
 
 package com.websudos.morpheus.column
 
+import com.datastax.driver.core.Row
+import com.datastax.driver.core.Row
 import com.websudos.morpheus.Row
 import com.websudos.morpheus.builder.SQLBuiltQuery
 import com.websudos.morpheus.dsl.BaseTable
 import com.websudos.morpheus.query.QueryAssignment
+import com.websudos.phantom.CassandraTable
+import com.websudos.phantom.column.AbstractColumn
 
 import scala.reflect.runtime.{currentMirror => cm}
+import scala.util.{Failure, Success, Try}
 
 private[morpheus] trait SchemaSerializer {
   def qb: SQLBuiltQuery
@@ -75,10 +80,26 @@ private[morpheus] abstract class SelectColumn[T](val qb: SQLBuiltQuery) {
 private[morpheus] abstract class Column[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, T](val table: BaseTable[Owner, Record, TableRow])
   extends AbstractColumn[T] {
 
-  def optional(r: Row): Option[T]
+  def optional(r: Row): Try[T]
 
-  def apply(r: Row): T = optional(r).getOrElse(throw new Exception(s"can't extract required value for column '$name'"))
+  def apply(r: Row): T = {
+    case Success(value) => value
+    case Failure(ex) => {
+      table.logger.error(ex.getMessage)
+      throw ex
+    }
+  }
 }
+
+private[morpheus] abstract class OptionalColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, T](val table: BaseTable[Owner, Record, TableRow])
+  extends AbstractColumn[Option[T]] {
+
+  def optional(r: Row): Try[T]
+
+  def apply(r: Row): Option[T] = optional(r).toOption
+}
+
+
 
 
 private[morpheus] abstract class AbstractModifyColumn[RR](col: AbstractColumn[RR]) {

@@ -121,6 +121,7 @@ object Build extends Build {
   ).settings(
     name := "morpheus-dsl",
     libraryDependencies ++= Seq(
+      "org.slf4j"                    % "slf4j-api"                         % "1.7.12",
       "com.websudos"                 %% "diesel-engine"                    % DieselEngineVersion,
       "com.chuusai"                  %% "shapeless"                        % "2.2.4",
       "org.scala-lang"               % "scala-reflect"                     % scalaVersion.value,

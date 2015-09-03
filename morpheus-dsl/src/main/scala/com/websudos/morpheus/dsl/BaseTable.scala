@@ -34,6 +34,7 @@ import com.websudos.morpheus.Row
 import com.websudos.morpheus.builder.{AbstractQueryBuilder, AbstractSQLSyntax}
 import com.websudos.morpheus.column.AbstractColumn
 import com.websudos.morpheus.query._
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.{ArrayBuffer => MutableArrayBuffer, SynchronizedBuffer => MutableSyncBuffer}
 import scala.reflect.runtime.universe.Symbol
@@ -61,6 +62,8 @@ abstract class BaseTable[Owner <: BaseTable[Owner, _, TableRow], Record, TableRo
 
   protected[this] def syntax: AbstractSQLSyntax
 
+
+  lazy val logger = LoggerFactory.getLogger(getClass.getName.stripSuffix("$"))
 
   /**
    * This is a Synchronized mutable buffer allowing us to store references to the objects a user writes inside a table definition to represent columns.
