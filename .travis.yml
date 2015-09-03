@@ -35,6 +35,8 @@ jdk:
 
 before_script:
   - mysql -e 'create database morpheus;'
+  - mysql -e "CREATE USER 'morpheus'@'localhost' IDENTIFIED BY 'morpheus23!';"
+  - mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'morpheus'@'localhost';"
 
 script: "sbt clean coverage test"
 
