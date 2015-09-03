@@ -92,5 +92,8 @@ trait MySQLColumns {
   class CharColumn[T <: BaseTable[T, R, MySQLRow], R](t: BaseTable[T, R, MySQLRow], limit: Int = 0)(implicit ev: SQLPrimitive[String])
     extends AbstractCharColumn[T, R, MySQLRow](t, limit)
 
+  class EnumColumn[T <: BaseTable[T, R, MySQLRow], R, Enum <: Enumeration](t: BaseTable[T, R, MySQLRow], enum: Enum)(implicit ev: SQLPrimitive[String])
+    extends AbstractEnumColumn[T, R, MySQLRow, Enum](t, enum) {
+  }
 
 }

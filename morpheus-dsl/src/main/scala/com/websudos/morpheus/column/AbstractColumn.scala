@@ -30,14 +30,10 @@
 
 package com.websudos.morpheus.column
 
-import com.datastax.driver.core.Row
-import com.datastax.driver.core.Row
 import com.websudos.morpheus.Row
 import com.websudos.morpheus.builder.SQLBuiltQuery
 import com.websudos.morpheus.dsl.BaseTable
 import com.websudos.morpheus.query.QueryAssignment
-import com.websudos.phantom.CassandraTable
-import com.websudos.phantom.column.AbstractColumn
 
 import scala.reflect.runtime.{currentMirror => cm}
 import scala.util.{Failure, Success, Try}
@@ -99,10 +95,9 @@ private[morpheus] abstract class OptionalColumn[Owner <: BaseTable[Owner, Record
   def apply(r: Row): Option[T] = optional(r).toOption
 }
 
-
-
-
 private[morpheus] abstract class AbstractModifyColumn[RR](col: AbstractColumn[RR]) {
 
-  def setTo(value: RR): QueryAssignment = QueryAssignment(col.table.queryBuilder.setTo(col.name, col.toQueryString(value)))
+  def setTo(value: RR): QueryAssignment = {
+    QueryAssignment(col.table.queryBuilder.setTo(col.name, col.toQueryString(value)))
+  }
 }

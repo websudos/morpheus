@@ -30,7 +30,7 @@
 
 package com.websudos.morpheus.column
 
-import com.websudos.morpheus.builder.DefaultSQLDataTypes
+import com.websudos.morpheus.builder.{DefaultQueryBuilder, DefaultSQLDataTypes, SQLBuiltQuery}
 import com.websudos.morpheus.dsl.BaseTable
 import com.websudos.morpheus.{Row, SQLPrimitive}
 
@@ -107,27 +107,10 @@ abstract class AbstractLongBlobColumn[T <: BaseTable[T, R, TableRow], R, TableRo
 
 
 abstract class AbstractEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
-  extends Column[Owner, Record, TableRow, String](table) {
+  extends Column[Owner, Record, TableRow, EnumType#Value](table) {
 
-  override def sqlType: String = DefaultSQLDataTypes.varchar
-}
-
-
-abstract class AbstractEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
-  extends Column[Owner, Record, TableRow, String](table) {
-
-  override def sqlType: String = DefaultSQLDataTypes.varchar
-}
-
-
-class OptionalEnumColumn[Owner <: BaseTable[Owner, Record], Record, EnumType <: Enumeration](table: CassandraTable[Owner, Record], enum: EnumType)
-  extends OptionalColumn[Owner, Record, EnumType#Value](table) {
-
-  def cassandraType: String = CQLSyntax.Types.Text
-
-  def optional(r: Row): Try[EnumType#Value] = {
-
-    val enumConstant = r.getString(name)
+  override def optional(r: Row): Try[EnumType#Value] = {
+    val enumConstant = r.string(name)
 
     enum.values.find(_.toString == enumConstant) match {
       case Some(value) => Success(value)
@@ -135,7 +118,15 @@ class OptionalEnumColumn[Owner <: BaseTable[Owner, Record], Record, EnumType <: 
     }
   }
 
-  override def asCql(v: Option[EnumType#Value]) = v.map(item => CQLQuery.empty.singleQuote(item.toString)).orNull
+  override def toQueryString(v: EnumType#Value): String = DefaultQueryBuilder.escape(v.toString)
 
+  override def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
+
+  override def sqlType: String = DefaultSQLDataTypes.varchar
 }
 
+abstract class AbstractOptionalEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
+  extends OptionalColumn[Owner, Record, TableRow, String](table) {
+
+  override def sqlType: String = DefaultSQLDataTypes.varchar
+}

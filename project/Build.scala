@@ -5,7 +5,7 @@ import sbt._
 
 object Build extends Build {
 
-  val UtilVersion = "0.9.9"
+  val UtilVersion = "0.9.11"
   val FinagleVersion = "6.25.0"
   val SparkVersion = "1.2.1"
   val FinaglePostgres = "0.1.0-SNAPSHOT"
