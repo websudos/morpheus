@@ -18,9 +18,13 @@ currently hitting that bar for Cassandra, Neo4J and MongoDB. But why stop there?
 Using morpheus
 ==============
 
-The current version is: ```val morpheusVersion = 0.1.0```.
-Morpheus is published to the Websudos Maven repository at ```http://maven.websudos.co.uk/ext-release-local``` and it's actively and avidly developed. It is 
-not yet production ready.
+The current version is: ```val morpheusVersion = 0.2.3```.
+
+Morpheus is actively and avidly developed. It is not yet production ready, so trial at your own risk.
+
+- The stable release is always available on Maven Central and will be indicated by the badge at the top of this readme. The Maven Central badge is pointing at the latest version
+
+- Intermediary releases are available through our managed Bintray repository available at `https://dl.bintray.com/websudos/oss-releases/`. The latest version available on our Bintray repository is indicated by the Bintray badge at the top of this readme.
 
 <a id="table-of-contents">Table of contents</a>
 ===============================================
@@ -36,6 +40,7 @@ not yet production ready.
       <li><a href="./docs/Oracle.md">Oracle(Morpheus Enterprise)</a></li>
       <li><a href="./docs/MSSQL.md">MS SQL(Morpheus Enterprise)</a></li>
   </li>
+  <li><a href="#support">Support</a></li>
   <li><a href="#copyright">Copyright</a></li>
 </ol>
 
@@ -91,6 +96,7 @@ And then you can: ```import com.websudos.morpheus.mysql._```, which will give yo
 unsupported operations. Morpheus guarantees you can almost never write an invalid SQL query unless you try really really hard.
 
 
+
 ### Available modules ###
 
 The full list of available modules is:
@@ -107,14 +113,43 @@ libraryDependencies ++= Seq(
 =====================================
 <a href="#table-of-contents">back to top</a>
 
-Morpheus was developed at websudos as the foundation of our upcoming book, "Learning Scala by example", which covers all aspects of building an enterprise 
-grade Scala framework from scratch.
+Morpheus was developed by us from scratch in an attempt to evolve the SQL tooling in the Scala ecosystem
+ to the new level and bring in fully reactive database access while preserving the complete SQL syntax you are used to.
 
 * Flavian Alexandru @alexflav23
 * Benjamin Edwards @benjumanji
+
+
+
+<a id="support">Commercial support</a>
+======================================
+<a href="#table-of-contents">back to top</a>
+
+We, the people behind phantom run a software development house specialised in Scala and NoSQL. If you are after enterprise grade
+training or support for using phantom, [Websudos](http://websudos.com) is here to help!
+
+We offer a comprehensive range of elite Scala development services, including but not limited to:
+
+- Software development
+- Remote Scala contractors for hire
+- Advanced Scala and Morpheus training
+
+
+We are big fans of open source and we will open source every project we can! To read more about our OSS efforts, click [here](http://www.websudos.com/#/work).
+
+### morpheus-enterprise
+
+Morpheus Enterprise is an upgraded version of Morpheus which includes several extremely powerful features that will not be available in the open source version, including and not limited to:
+
+- Full online access to a complete set of phantom tutorials, accompanied by our direct support.
+- Advanced support for integrating morpheus with Apache Spark and especially SparkSQL.
+- A very powerful schema management framework called `morpheus-migrations` which allows you not only to completely automate schema management and do it all in Scala, but also to let phantom automatically handle most use cases for you.
+- `morpheus-autotables`, an advanced macro based framework which will auto-generate, auto-manage, and auto-migrate all your queries from case classes.
+- Full support for Oracle, Oracle Exadata and SQL Server
+
 
 <a id="copyright">Copyright</a>
 ===============================
 <a href="#table-of-contents">back to top</a>
 
-Copyright (c) 2015 websudos.
+Copyright (c) 2012 - 2015 websudos.
