@@ -5,6 +5,11 @@ language: scala
 services:
     - mysql
 
+cache:
+  directories:
+   - $HOME/.ivy2/cache
+   - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+
 sudo: false
 
 scala:
@@ -37,8 +42,10 @@ before_script:
   - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
   - mysql -e "CREATE DATABASE morpheus_test;"
   - mysql -e "CREATE USER 'morpheus'@'localhost' IDENTIFIED BY 'morpheus23!';"
-  - mysql -e "SET PASSWORD FOR 'travis'@'localhost' = 'morpheus23!' -uroot"
+  - mysql -e "SET PASSWORD FOR 'travis'@'localhost' = 'morpheus23!'"
 
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+
+
 
 
