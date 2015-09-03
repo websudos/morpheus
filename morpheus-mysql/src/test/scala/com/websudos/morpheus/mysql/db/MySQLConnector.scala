@@ -53,7 +53,7 @@ object MySQLConnector {
    */
   lazy val client = {
     val c = Mysql.client
-      .withCredentials(user, pwd)
+      .withCredentials("travis", "")
       .withDatabase("morpheus_test")
       .newRichClient("127.0.0.1:3306")
     Await.result(c.ping(), 2.seconds)
