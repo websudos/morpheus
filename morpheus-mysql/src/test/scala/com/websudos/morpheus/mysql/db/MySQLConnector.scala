@@ -42,7 +42,7 @@ import org.scalatest.time.{Seconds, Span}
 object MySQLConnector {
 
   def isRunningUnderTravis: Boolean = {
-    System.getenv("TRAVIS").exists("TRUE" ==)
+    System.getenv("TRAVIS") == "TRUE"
   }
 
   val user = if (isRunningUnderTravis) "travis" else "morpheus"
