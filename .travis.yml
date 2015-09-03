@@ -34,7 +34,7 @@ jdk:
 
 
 before_script:
-  - mysql -e "create database 'morpheus-test';"
+  - mysql -e "CREATE DATABASE morpheus-test;"
   - mysql -e "CREATE USER 'morpheus'@'localhost' IDENTIFIED BY 'morpheus23!';"
 
 script: "sbt clean coverage test"
