@@ -32,13 +32,12 @@ package com.websudos.morpheus.mysql.db
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.exp.Mysql
-import com.twitter.finagle.exp.mysql.Handshake
 import com.twitter.util.Await
 import com.websudos.morpheus.Client
 import com.websudos.morpheus.mysql.{MySQLClient, MySQLResult, MySQLRow}
-import org.scalatest.{Suite, BeforeAndAfterAll, Matchers, OptionValues}
 import org.scalatest.concurrent.{AsyncAssertions, PatienceConfiguration, ScalaFutures}
 import org.scalatest.time.{Seconds, Span}
+import org.scalatest.{BeforeAndAfterAll, Matchers, OptionValues, Suite}
 
 object MySQLConnector {
 
@@ -47,7 +46,7 @@ object MySQLConnector {
    */
   lazy val client = {
     val c = Mysql.client
-      .configured(Handshake.Credentials(Option("travis"), None))
+      .withCredentials("travis", "morpheus23!")
       .withDatabase("morpheus_test")
       .newRichClient("127.0.0.1:3306")
     Await.result(c.ping(), 2.seconds)
