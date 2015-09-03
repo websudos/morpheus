@@ -16,10 +16,8 @@ object Build extends Build {
   val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
     publishMavenStyle := true,
     bintray.BintrayKeys.bintrayOrganization := Some("websudos"),
-    bintray.BintrayKeys.bintrayRepository := "internal-releases",
+    bintray.BintrayKeys.bintrayRepository := "oss-releases",
     bintray.BintrayKeys.bintrayReleaseOnPublish := true,
-    publishArtifact in (Compile, packageSrc) := false,
-    publishArtifact in (Test, packageSrc) := false,
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => true},
     licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))
@@ -69,7 +67,7 @@ object Build extends Build {
 
   val sharedSettings: Seq[Def.Setting[_]] = Seq(
     organization := "com.websudos",
-    version := "0.2.1",
+    version := "0.2.2",
     scalaVersion := "2.11.7",
     crossScalaVersions := Seq("2.10.5", "2.11.7"),
     resolvers ++= Seq(
