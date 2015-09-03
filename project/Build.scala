@@ -9,7 +9,7 @@ object Build extends Build {
   val FinagleVersion = "6.25.0"
   val SparkVersion = "1.2.1"
   val FinaglePostgres = "0.1.0-SNAPSHOT"
-  val FinagleZkVersion = "6.24.0"
+  val FinagleZkVersion = "6.28.0"
   val ShapelessVersion = "2.2.4"
   val DieselEngineVersion = "0.2.4"
 
