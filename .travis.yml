@@ -42,6 +42,7 @@ before_script:
   - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
   - mysql -e "CREATE DATABASE morpheus_test;"
   - mysql -e "CREATE USER 'morpheus'@'localhost' IDENTIFIED BY 'morpheus23!';"
+  - mysql -e "SET PASSWORD FOR 'travis'@'localhost' = PASSWORD('morpheus23!')"
 
 script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test
 

@@ -46,7 +46,7 @@ object MySQLConnector {
   }
 
   val user = if (isRunningUnderTravis) "travis" else "morpheus"
-  val pwd = if (isRunningUnderTravis) null else "morpheus23!"
+  val pwd = "morpheus23!"
 
   /**
    * This client is meant to connect to the Travis CI default MySQL service.
