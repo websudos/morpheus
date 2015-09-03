@@ -34,6 +34,8 @@ import org.joda.time.DateTime
 
 import com.websudos.morpheus.builder.{DefaultQueryBuilder, DefaultSQLDataTypes}
 
+import scala.util.Try
+
 case class InvalidTypeDefinitionException(msg: String = "Invalid SQL type declared for column") extends RuntimeException(msg)
 
 
@@ -64,7 +66,7 @@ trait SQLPrimitive[T] {
 
   def toSQL(value: T): String
 
-  def fromRow(row: Row, name: String): Option[T]
+  def fromRow(row: Row, name: String): Try[T]
 }
 
 class DefaultIntPrimitive extends SQLPrimitive[Int] {
@@ -74,7 +76,7 @@ class DefaultIntPrimitive extends SQLPrimitive[Int] {
     value.toString
   }
 
-  def fromRow(row: Row, name: String): Option[Int] = Some(row.int(name))
+  def fromRow(row: Row, name: String): Try[Int] = Try(row.int(name))
 }
 
 class DefaultFloatPrimitive extends SQLPrimitive[Float] {
@@ -82,7 +84,7 @@ class DefaultFloatPrimitive extends SQLPrimitive[Float] {
 
   override def toSQL(value: Float): String = value.toString
 
-  def fromRow(row: Row, name: String): Option[Float] = Some(row.float(name))
+  def fromRow(row: Row, name: String): Try[Float] = Try(row.float(name))
 }
 
 class DefaultDoublePrimitive extends SQLPrimitive[Double] {
@@ -90,7 +92,7 @@ class DefaultDoublePrimitive extends SQLPrimitive[Double] {
 
   override def toSQL(value: Double): String = value.toString
 
-  def fromRow(row: Row, name: String): Option[Double] = Some(row.double(name))
+  def fromRow(row: Row, name: String): Try[Double] = Try(row.double(name))
 }
 
 class DefaultLongPrimitive extends SQLPrimitive[Long] {
@@ -98,7 +100,7 @@ class DefaultLongPrimitive extends SQLPrimitive[Long] {
 
   override def toSQL(value: Long): String = value.toString
 
-  def fromRow(row: Row, name: String): Option[Long] = Some(row.long(name))
+  def fromRow(row: Row, name: String): Try[Long] = Try(row.long(name))
 }
 
 class DefaultDatePrimitive extends SQLPrimitive[Date] {
@@ -106,7 +108,7 @@ class DefaultDatePrimitive extends SQLPrimitive[Date] {
 
   def toSQL(value: Date): String = value.toString
 
-  def fromRow(row: Row, name: String): Option[Date] = Some(row.date(name))
+  def fromRow(row: Row, name: String): Try[Date] = Try(row.date(name))
 }
 
 class DefaultDateTimePrimitive extends SQLPrimitive[DateTime] {
@@ -114,7 +116,7 @@ class DefaultDateTimePrimitive extends SQLPrimitive[DateTime] {
 
   def toSQL(value: DateTime): String = value.toString
 
-  def fromRow(row: Row, name: String): Option[DateTime] = Some(row.datetime(name))
+  def fromRow(row: Row, name: String): Try[DateTime] = Try(row.datetime(name))
 }
 
 class DefaultStringPrimitive extends SQLPrimitive[String] {
@@ -123,8 +125,8 @@ class DefaultStringPrimitive extends SQLPrimitive[String] {
 
   override def toSQL(value: String): String = DefaultQueryBuilder.escape(value)
 
-  def fromRow(row: Row, name: String): Option[String] = {
-    Some(row.string(name))
+  def fromRow(row: Row, name: String): Try[String] = {
+    Try(row.string(name))
   }
 }
 

@@ -11,7 +11,7 @@ object Build extends Build {
   val FinaglePostgres = "0.1.0-SNAPSHOT"
   val FinagleZkVersion = "6.24.0"
   val ShapelessVersion = "2.2.4"
-  val DieselEngineVersion = "0.2.2"
+  val DieselEngineVersion = "0.2.4"
 
   val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
     publishMavenStyle := true,
@@ -70,8 +70,8 @@ object Build extends Build {
   val sharedSettings: Seq[Def.Setting[_]] = Seq(
     organization := "com.websudos",
     version := "0.2.1",
-    scalaVersion := "2.10.5",
-    crossScalaVersions := Seq("2.10.5", "2.11.6"),
+    scalaVersion := "2.11.7",
+    crossScalaVersions := Seq("2.10.5", "2.11.7"),
     resolvers ++= Seq(
       "Typesafe repository snapshots" at "http://repo.typesafe.com/typesafe/snapshots/",
       "Typesafe repository releases" at "http://repo.typesafe.com/typesafe/releases/",
@@ -81,7 +81,7 @@ object Build extends Build {
       "Sonatype staging"                 at "http://oss.sonatype.org/content/repositories/staging",
       "Java.net Maven2 Repository"       at "http://download.java.net/maven/2/",
       "Twitter Repository"               at "http://maven.twttr.com",
-      Resolver.bintrayRepo("websudos", "internal-releases")
+      Resolver.bintrayRepo("websudos", "oss-releases")
     ),
     scalacOptions ++= Seq(
       "-language:postfixOps",

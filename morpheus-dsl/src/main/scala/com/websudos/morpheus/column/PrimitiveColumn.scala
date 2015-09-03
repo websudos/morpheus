@@ -38,6 +38,7 @@ import com.websudos.morpheus.{Row, SQLPrimitive}
 import org.joda.time.DateTime
 
 import scala.annotation.implicitNotFound
+import scala.util.Try
 
 private[morpheus] object KnownTypeLimits {
   val varcharLimit = 65536
@@ -57,7 +58,7 @@ private[morpheus] class PrimitiveColumn[T <: BaseTable[T, R, TableRow], R, Table
 
   def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
 
-  def optional(r: Row): Option[RR] = implicitly[SQLPrimitive[RR]].fromRow(r, name)
+  def optional(r: Row): Try[RR] = implicitly[SQLPrimitive[RR]].fromRow(r, name)
 }
 
 class AbstractLongColumn[

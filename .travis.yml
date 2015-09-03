@@ -5,8 +5,11 @@ language: scala
 services:
     - mysql
 
+sudo: false
+
 scala:
- - "2.10.4"
+ - "2.10.5"
+ - "2.11.7"
 
 # Emails to notify
 notifications:

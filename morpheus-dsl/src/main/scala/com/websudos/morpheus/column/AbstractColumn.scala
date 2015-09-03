@@ -78,7 +78,7 @@ private[morpheus] abstract class Column[Owner <: BaseTable[Owner, Record, TableR
 
   def optional(r: Row): Try[T]
 
-  def apply(r: Row): T = {
+  def apply(r: Row): T = optional(r) match {
     case Success(value) => value
     case Failure(ex) => {
       table.logger.error(ex.getMessage)
