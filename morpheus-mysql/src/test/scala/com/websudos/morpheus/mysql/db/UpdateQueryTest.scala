@@ -27,11 +27,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+package com.websudos.morpheus.mysql.db
 
-package com.websudos.morpheus.query
+import org.scalatest.FlatSpec
 
-import org.scalatest.{Matchers, FlatSpec}
-
-class SQLPrimitivesTest extends FlatSpec with Matchers {
+class UpdateQueryTest extends FlatSpec with MySQLSuite {
 
 }

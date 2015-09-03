@@ -54,7 +54,7 @@ private[morpheus] object DefaultForeignKeyConstraints extends DefaultForeignKeyC
  * It's a simple way of verifying that the column being dealt with is a ForeignKey and nothing else. For instance,
  * this is used when building join queries to ensure joins are properly created from a foreign key to the respective indexes.
  */
-private[morpheus] trait ForeignKeyDefinition {}
+private[morpheus] trait ForeignKeyDefinition
 
 /**
  * This is the implementation of a ForeignKey column. This is not a value column, therefore the `apply` method is overridden to throw an exception. It is used
@@ -111,7 +111,7 @@ abstract class AbstractForeignKey[T <: BaseTable[T, R, TableRow], R, TableRow <:
   }
 
   /**
-   * This is actually irrelevant at any further point, since the query builder of ForeignKey will not account for it's SQL type.
+   * This is actually irrelevant at any further point, since the query builder of ForeignKey will not account for its SQL type.
    * We do however need to satisfy the context bound of an SQL primitive and we do so easily but using a random predefined type.
    *
    * @return The SQL type of the column, ignored in the current context.
