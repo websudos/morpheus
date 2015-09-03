@@ -15,7 +15,7 @@ scala:
 notifications:
   slack:
     rooms:
-      - websudos:P9QNXx1ZGFnDHp3v3jUqtB8k
+      - websudos: P9QNXx1ZGFnDHp3v3jUqtB8k
 
   email:
   - dev@websudos.com
@@ -34,8 +34,10 @@ jdk:
 
 
 before_script:
+  - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
   - mysql -e "CREATE DATABASE morpheus_test;"
   - mysql -e "CREATE USER 'morpheus'@'localhost' IDENTIFIED BY 'morpheus23!';"
 
-script: "sbt clean coverage test"
+script: sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+
 
