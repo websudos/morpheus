@@ -35,18 +35,25 @@ import com.twitter.finagle.exp.Mysql
 import com.twitter.util.Await
 import com.websudos.morpheus.Client
 import com.websudos.morpheus.mysql.{MySQLClient, MySQLResult, MySQLRow}
+import org.scalatest.{Suite, BeforeAndAfterAll, Matchers, OptionValues}
 import org.scalatest.concurrent.{AsyncAssertions, PatienceConfiguration, ScalaFutures}
 import org.scalatest.time.{Seconds, Span}
-import org.scalatest.{BeforeAndAfterAll, Matchers, OptionValues, Suite}
 
 object MySQLConnector {
+
+  def isRunningUnderTravis: Boolean = {
+    System.getenv.containsKey("TRAVIS")
+  }
+
+  val user = if (isRunningUnderTravis) "travis" else "morpheus"
+  val pwd = if (isRunningUnderTravis) "" else "morpheus23!"
 
   /**
    * This client is meant to connect to the Travis CI default MySQL service.
    */
   lazy val client = {
     val c = Mysql.client
-      .withCredentials("travis", "morpheus23!")
+      .withCredentials("user", pwd)
       .withDatabase("morpheus_test")
       .newRichClient("127.0.0.1:3306")
     Await.result(c.ping(), 2.seconds)
