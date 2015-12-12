@@ -16,7 +16,7 @@
 
 package com.websudos.morpheus.mysql
 
-import com.websudos.morpheus.mysql.tables.BasicRecord
+import com.websudos.morpheus.mysql.tables.{TestEnumeration, EnumerationRecord, BasicRecord}
 import com.websudos.util.testing._
 
 package object db {
@@ -26,6 +26,15 @@ package object db {
       BasicRecord(
         gen[String],
         gen[Int]
+      )
+    }
+  }
+
+  implicit object EnumerationRecordSamplers extends Sample[EnumerationRecord] {
+    def sample: EnumerationRecord = {
+      EnumerationRecord(
+        id = gen[Int],
+        enum = oneOf(TestEnumeration)
       )
     }
   }

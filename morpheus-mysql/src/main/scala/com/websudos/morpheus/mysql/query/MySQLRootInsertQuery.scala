@@ -66,19 +66,19 @@ private[morpheus] class MySQLInsertSyntaxBlock(query: String, tableName: String)
 class MySQLRootInsertQuery[T <: BaseTable[T, _, MySQLRow], R](table: T, st: MySQLInsertSyntaxBlock, rowFunc: MySQLRow => R)
   extends RootInsertQuery[T, R, MySQLRow](table, st, rowFunc) {
 
-  def delayed: MySQLInsertQuery[T, R, Ungroupped, Unordered, Unlimited, Unchainned, AssignUnchainned, Unterminated] = {
+  def delayed: MySQLInsertQuery.Default[T, R] = {
     new MySQLInsertQuery(table, st.delayed, rowFunc)
   }
 
-  def lowPriority: MySQLInsertQuery[T, R, Ungroupped, Unordered, Unlimited, Unchainned, AssignUnchainned, Unterminated] = {
+  def lowPriority: MySQLInsertQuery.Default[T, R] = {
     new MySQLInsertQuery(table, st.lowPriority, rowFunc)
   }
 
-  def highPriority: MySQLInsertQuery[T, R, Ungroupped, Unordered, Unlimited, Unchainned, AssignUnchainned, Unterminated] = {
+  def highPriority: MySQLInsertQuery.Default[T, R] = {
     new MySQLInsertQuery(table, st.highPriority, rowFunc)
   }
 
-  def ignore: MySQLInsertQuery[T, R, Ungroupped, Unordered, Unlimited, Unchainned, AssignUnchainned, Unterminated] = {
+  def ignore: MySQLInsertQuery.Default[T, R] = {
     new MySQLInsertQuery(table, st.ignore, rowFunc)
   }
 
@@ -99,3 +99,7 @@ class MySQLInsertQuery[T <: BaseTable[T, _, MySQLRow],
   valuePart: ValuePart = Defaults.EmptyValuePart,
   lightweightPart: LightweightPart = Defaults.EmptyLightweightPart
 ) extends InsertQuery[T, R, MySQLRow, Group, Order, Limit, Chain, AssignChain, Status](table: T, init, rowFunc) {}
+
+object MySQLInsertQuery {
+  type Default[T <: BaseTable[T, _, MySQLRow], R] = MySQLInsertQuery[T, R, Ungroupped, Unordered, Unlimited, Unchainned, AssignUnchainned, Unterminated]
+}

@@ -19,8 +19,12 @@ scala:
 # Emails to notify
 notifications:
   slack:
-    rooms:
-      - websudos: P9QNXx1ZGFnDHp3v3jUqtB8k
+    - websudos:P9QNXx1ZGFnDHp3v3jUqtB8k
+  email:
+    - dev@websudos.co.uk
+
+
+
 
   email:
   - dev@websudos.com
@@ -35,8 +39,8 @@ sudo: false
 
 jdk:
   - oraclejdk7
+  - oraclejdk8
   - openjdk7
-
 
 before_script:
   - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
@@ -45,10 +49,7 @@ before_script:
   - mysql -e "SET PASSWORD FOR 'travis'@'localhost' = PASSWORD('morpheus23!')"
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION "project morpheus-dsl" clean coverage test coverageReport
-  - sbt ++$TRAVIS_SCALA_VERSION "project morpheus-mysql" clean coverage test coverageReport
-  - sbt ++$TRAVIS_SCALA_VERSION "project morpheus-testkit" clean coverage test coverageReport
-  - sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
+  - sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageAggregate
 
 after_success:
-  - sbt ++$TRAVIS_SCALA_VERSION coveralls
+  - sbt ++$TRAVIS_SCALA_VERSION 'set unmanagedSourceDirectories in Compile := Seq(file("."))' && coveralls

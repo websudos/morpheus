@@ -31,6 +31,10 @@
 package com.websudos.morpheus.mysql.tables
 
 import com.websudos.morpheus.mysql._
+import com.websudos.morpheus.mysql.query.MySQLInsertQuery
+import com.websudos.morpheus.query.InsertQuery
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class IndexedRecord(id: Int, value: Long)
 
@@ -165,3 +169,32 @@ class BasicTable extends Table[BasicTable, BasicRecord] {
 }
 
 object BasicTable extends BasicTable
+
+
+trait TestEnumeration extends Enumeration {
+  val EnumOne = Value("One")
+  val EnumTwo = Value("Two")
+}
+
+object TestEnumeration extends TestEnumeration
+
+case class EnumerationRecord(
+  id: Int,
+  enum: TestEnumeration#Value
+)
+
+class EnumerationTable extends Table[EnumerationTable, EnumerationRecord] {
+
+  object id extends IntColumn(this) with PrimaryKey[Int] with Autoincrement with NotNull
+
+  object enum extends EnumColumn[EnumerationTable, EnumerationRecord, TestEnumeration](this, TestEnumeration)
+
+  def fromRow(row: Row): EnumerationRecord = {
+    EnumerationRecord(
+      id = id(row),
+      enum = enum(row)
+    )
+  }
+}
+
+object EnumerationTable extends EnumerationTable

@@ -30,11 +30,13 @@
 
 package com.websudos.morpheus
 
-import com.websudos.morpheus.column.{DefaultForeignKeyConstraints, AbstractColumn}
+import com.websudos.morpheus.column.{AbstractColumn, DefaultForeignKeyConstraints}
 import com.websudos.morpheus.dsl.DefaultImportsDefinition
 import com.websudos.morpheus.mysql.query.{MySQLRootSelectQuery, MySQLSelectQuery}
 import com.websudos.morpheus.operators.MySQLOperatorSet
 import com.websudos.morpheus.query.{AssignUnchainned, Unchainned, Ungroupped, Unlimited, Unordered, Unterminated}
+
+import scala.util.Try
 
 
 package object mysql extends DefaultImportsDefinition
@@ -60,4 +62,17 @@ package object mysql extends DefaultImportsDefinition
   type Result = com.websudos.morpheus.mysql.MySQLResult
 
   type Table[Owner <: BaseTable[Owner, Record, MySQLRow], Record] = com.websudos.morpheus.mysql.MySQLTable[Owner, Record]
+
+  def enumToQueryConditionPrimitive[T <: Enumeration](enum: T)(implicit ev: SQLPrimitive[String]): SQLPrimitive[T#Value] = {
+    new SQLPrimitive[T#Value] {
+
+      override def sqlType: String = ev.sqlType
+
+      override def fromRow(row: com.websudos.morpheus.Row, name: String): Try[T#Value] = {
+        Try { enum.withName(row.string(name)) }
+      }
+
+      override def toSQL(value: T#Value): String = ev.toSQL(value.toString)
+    }
+  }
 }

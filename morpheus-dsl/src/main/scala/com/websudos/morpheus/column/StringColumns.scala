@@ -122,7 +122,7 @@ abstract class AbstractEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], R
 
   override def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
 
-  override def sqlType: String = DefaultSQLDataTypes.varchar
+  override def sqlType: String = s"${DefaultSQLDataTypes.varchar}(200)"
 }
 
 abstract class AbstractOptionalEnumColumn[Owner <: BaseTable[Owner, Record, TableRow], Record, TableRow <: Row, EnumType <: Enumeration](table: BaseTable[Owner, Record, TableRow], enum: EnumType)
