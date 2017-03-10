@@ -37,8 +37,8 @@ object Connector {
   def isRunningUnderTravis: Boolean = sys.env.contains("TRAVIS")
 
   private[this] val databaseName = "morpheus_test"
-  val user = "morpheus"
-  val pwd = "morpheus23!"
+  private[this] val user = if (isRunningUnderTravis) "travis" else "morpheus"
+  private[this] val pwd = "morpheus23!"
 
   /**
    * This client is meant to connect to the Travis CI default MySQL service.
@@ -58,10 +58,7 @@ object Connector {
         s"""mysql -e "SET PASSWORD FOR '$user'@'localhost' = PASSWORD('$pwd')""""
       )
 
-      Console.println(procs.mkString("\n"))
-
-      /*procs.foreach { cmd =>
-        Console.println(s"Trying to execute command $cmd")
+      procs.foreach { cmd =>
         val proc = cmd.!
 
         if (proc != 0) {
@@ -69,7 +66,7 @@ object Connector {
         } else {
           logger.info(s"Successfully initialised the local database $databaseName with user $user")
         }
-      }*/
+      }
 
     } else {
       logger.info("Local database is already initialised.")
