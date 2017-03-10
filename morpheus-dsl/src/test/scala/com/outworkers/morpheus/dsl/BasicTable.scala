@@ -13,3 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.dsl
+
+import com.outworkers.morpheus.sql.DefaultRow
+import com.outworkers.morpheus.sql._
+
+case class BasicRecord(name: String, count: Long)
+
+class BasicTable extends Table[BasicTable, BasicRecord] {
+
+  object name extends TextColumn(this)
+  object count extends LongColumn(this)
+
+  def fromRow(row: DefaultRow): BasicRecord = {
+    BasicRecord(name(row), count(row))
+  }
+
+}
+
+object BasicTable extends BasicTable

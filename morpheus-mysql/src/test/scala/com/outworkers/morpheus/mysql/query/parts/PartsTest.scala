@@ -13,3 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.mysql.query.parts
+
+import com.outworkers.morpheus.builder.SQLBuiltQuery
+import com.outworkers.morpheus.engine.query.parts.MergeList
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.{FlatSpec, Matchers}
+
+class PartsTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks {
+
+  it should "evaluate nonEmpty to true on a merge list of the inner list is empty" in {
+    forAll { l: List[String] =>
+      val part = MergeList(l.map(SQLBuiltQuery.apply))
+      part.nonEmpty shouldEqual l.nonEmpty
+    }
+  }
+}

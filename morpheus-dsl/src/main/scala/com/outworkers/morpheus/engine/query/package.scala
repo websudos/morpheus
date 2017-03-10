@@ -13,3 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.engine
+
+package object query {
+  sealed trait GroupBind
+  final abstract class Groupped extends GroupBind
+  final abstract class Ungroupped extends GroupBind
+
+  sealed trait ChainBind
+  final abstract class Chainned extends ChainBind
+  final abstract class Unchainned extends ChainBind
+
+  sealed trait OrderBind
+  final abstract class Ordered extends OrderBind
+  final abstract class Unordered extends OrderBind
+
+  sealed trait LimitBind
+  final abstract class Limited extends LimitBind
+  final abstract class Unlimited extends LimitBind
+
+}

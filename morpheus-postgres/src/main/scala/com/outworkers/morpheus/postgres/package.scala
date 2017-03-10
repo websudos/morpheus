@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 Websudos, Limited.
+ * Copyright 2013 - 2017 Outworkers, Limited.
  *
  * All rights reserved.
  *
@@ -27,29 +27,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-resolvers ++= Seq(
-  "jgit-repo" at "http://download.eclipse.org/jgit/maven",
-  "Twitter Repo" at "http://maven.twttr.com/",
-  Resolver.sonatypeRepo("releases"),
-  Resolver.bintrayRepo("outworkers", "oss-releases"),
-  Resolver.url("Websudos OSS", url("http://dl.bintray.com/websudos/oss-releases"))(Resolver.ivyStylePatterns),
-  Classpaths.sbtPluginReleases
-)
 
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.8.2")
+package com.outworkers.morpheus
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.0")
+package object postgres {
 
-addSbtPlugin("org.scoverage" %% "sbt-coveralls" % "1.1.0")
-
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
-
-addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.8.5")
-
-addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
-
-addSbtPlugin("com.websudos" % "sbt-package-dist" % "1.2.0")
-
-libraryDependencies += "org.slf4j" % "slf4j-nop" % "1.7.22"
+}

@@ -13,3 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.mysql.db
+
+import com.outworkers.morpheus.mysql.tables.BasicTable
+import org.scalatest.FlatSpec
+import com.outworkers.morpheus.mysql.dsl._
+
+class CreateQueryTest extends FlatSpec with BaseSuite {
+
+  it should "create a new table in the MySQL database" in {
+    whenReady(BasicTable.create.temporary.engine(InnoDB).future) {
+      res =>
+    }
+  }
+
+  it should "create a new table in the database if the table doesn't exist" in {
+    whenReady(BasicTable.create.ifNotExists.engine(InnoDB).future) { _ => }
+  }
+
+}

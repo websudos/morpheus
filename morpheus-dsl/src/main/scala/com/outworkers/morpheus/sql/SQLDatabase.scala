@@ -13,3 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.sql
+
+import com.outworkers.diesel.reflection.EarlyInit
+
+import scala.reflect.runtime.universe.TypeTag
+
+abstract class SQLDatabase[
+  T <: BaseTable[T, R, TableRow] : TypeTag,
+  R,
+  TableRow <: com.outworkers.morpheus.Row
+] extends EarlyInit[T] {
+  val columns = initialize()
+}

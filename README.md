@@ -11,20 +11,16 @@ MariaDB, Oracle and Sybase. We choose this name as it is the dream DSL for any S
 you've gotten used to. Also, morpheus stands for morphing. With the single switch of an import, morpheus will perform a full feature swap from MySQL to
 OracleSQL for example. It doesn't have a query compiler, instead it entirely mimics the functionality the database has.
 
-We've taken it up ourselves to produce the highest quality database integration tooling for all Scala users, 
-currently hitting that bar for Cassandra and Neo4J. But why stop there?
-
-
 Using morpheus
 ==============
 
-The current version is: ```val morpheusVersion = ``` [![Bintray](https://api.bintray.com/packages/websudos/oss-releases/morpheus-mysql/images/download.svg) ](https://bintray.com/websudos/oss-releases/morpheus-mysql/_latestVersion).
+The current version is: ```val morpheusVersion = ``` [![Bintray](https://api.bintray.com/packages/outworkers/oss-releases/morpheus-mysql/images/download.svg) ](https://bintray.com/websudos/oss-releases/morpheus-mysql/_latestVersion).
 
 Morpheus is actively and avidly developed. It is not yet production ready, so trial at your own risk.
 
 - The stable release is always available on Maven Central and will be indicated by the badge at the top of this readme. The Maven Central badge is pointing at the latest version
 
-- Intermediary releases are available through our managed Bintray repository available at `https://dl.bintray.com/websudos/oss-releases/`. The latest version available on our Bintray repository is indicated by the Bintray badge at the top of this readme.
+- Intermediary releases are available through our managed Bintray repository available at `Resolver.bintrayRepo("outworkers", "oss-releases")`. The latest version available on our Bintray repository is indicated by the Bintray badge at the top of this readme.
 
 <a id="table-of-contents">Table of contents</a>
 ===============================================
@@ -56,7 +52,7 @@ Instead of learning about primitives and rules we thought of to abstract away di
 Morpheus features a unique approach, what we call the auto-magical flip. Although at this point in time only MySQL is supported, 
 Morpheus is designed to give you an "all-you-can-eat" buffet through a single import.
 
-As follows: ```import com.websudos.morpheus.mysql._```.
+As follows: ```import com.outworkers.morpheus.mysql._```.
 
 And done, you can now define tables, query and so on. Say you have something like this:
 
@@ -137,19 +133,8 @@ We offer a comprehensive range of elite Scala development services, including bu
 
 We are big fans of open source and we will open source every project we can! To read more about our OSS efforts, click [here](http://www.outworkers.com/work).
 
-### morpheus-enterprise
-
-Morpheus Enterprise is an upgraded version of Morpheus which includes several extremely powerful features that will not be available in the open source version, including and not limited to:
-
-- Full online access to a complete set of phantom tutorials, accompanied by our direct support.
-- Advanced support for integrating morpheus with Apache Spark and especially SparkSQL.
-- A very powerful schema management framework called `morpheus-migrations` which allows you not only to completely automate schema management and do it all in Scala, but also to let phantom automatically handle most use cases for you.
-- `morpheus-autotables`, an advanced macro based framework which will auto-generate, auto-manage, and auto-migrate all your queries from case classes.
-- Full support for Oracle, Oracle Exadata and SQL Server
-
-
 <a id="copyright">Copyright</a>
 ===============================
 <a href="#table-of-contents">back to top</a>
 
-Copyright (c) 2012 - 2015 outworkers.
+Copyright (c) 2012 - 2017 outworkers.

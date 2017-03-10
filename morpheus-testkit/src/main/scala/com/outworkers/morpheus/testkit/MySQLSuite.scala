@@ -13,3 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.testkit
+
+import org.scalatest.{BeforeAndAfterAll, Suite}
+
+trait MySQLSuite extends Suite with BeforeAndAfterAll

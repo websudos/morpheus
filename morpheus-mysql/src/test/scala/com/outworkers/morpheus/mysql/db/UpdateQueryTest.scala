@@ -13,3 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.mysql.db
+
+import org.scalatest.FlatSpec
+
+class UpdateQueryTest extends FlatSpec with BaseSuite {
+
+}

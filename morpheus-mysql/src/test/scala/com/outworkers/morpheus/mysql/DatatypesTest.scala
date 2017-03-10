@@ -13,3 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.mysql
+
+import org.scalatest.{FlatSpec, Matchers}
+
+class DatatypesTest extends FlatSpec with Matchers {
+  it should "parse an int from a row" in {
+    val row = com.twitter.finagle.exp.mysql.StringValue
+  }
+}

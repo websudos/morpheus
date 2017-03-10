@@ -13,3 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.outworkers.morpheus.postgres
+
+import com.outworkers.morpheus.builder.{AbstractQueryBuilder, AbstractSQLSyntax, SQLOperatorSet}
+
+sealed class PostgresOperatorSet extends SQLOperatorSet {
+
+}
+
+object PostgresOperatorSet extends PostgresOperatorSet
+
+
+sealed class PostgresQueryBuilder extends AbstractQueryBuilder {
+  val operators: SQLOperatorSet = PostgresOperatorSet
+
+  val syntax: AbstractSQLSyntax = PostgresSyntax
+}
+
+object PostgresQueryBuilder extends PostgresQueryBuilder

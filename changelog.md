@@ -12,7 +12,7 @@ Changelog
 <a id="version-0.2.2">0.2.2</a>
 ===============================
 
-- Bumped `websudos-util` dependency to `0.9.11`.
+- Bumped `outworkers-util` dependency to `0.9.11`.
 - Bumped `scoverage` version to `1.3.1`.
 - Added the new scoverage resolver to `plugins.sbt`.
 - Settings MySQL password in Travis CI manually. Authentication without password doesn't work.

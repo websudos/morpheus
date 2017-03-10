@@ -30,30 +30,41 @@
 import com.twitter.sbt.{GitProject, VersionManagement}
 
 lazy val Versions = new {
-  val util = "0.18.2"
-  val finagle = "6.35.0"
+  val util = "0.30.1"
   val spark = "1.2.1"
-  val FinaglePostgres = "0.1.0-SNAPSHOT"
-  val FinagleZkVersion = "6.28.0"
-  val shapeless = "2.2.5"
-  val diesel = "0.2.4"
-  val lift = "3.0-RC3"
+  val FinaglePostgres = "0.1.0"
+  val shapeless = "2.3.2"
+  val diesel = "0.5.0"
+  val lift = "3.0"
   val slf4j = "1.7.21"
   val joda = "2.9.4"
   val jodaConvert = "1.8.1"
-  val twitterUtil = "6.33.0"
+
+  val finagle: String => String = { s =>
+    CrossVersion.partialVersion(s) match {
+      case Some((_, minor)) if minor >= 12 => "6.42.0"
+      case _ => "6.35.0"
+    }
+  }
+
+  val twitterUtil: String => String = {
+    s => CrossVersion.partialVersion(s) match {
+      case Some((_, minor)) if minor >= 12 => "6.41.0"
+      case _ => "6.34.0"
+    }
+  }
 }
 
 val liftVersion: String => String = {
   s => CrossVersion.partialVersion(s) match {
-    case Some((major, minor)) if minor >= 11 => Versions.lift
+    case Some((_, minor)) if minor >= 11 => Versions.lift
     case _ => "3.0-M1"
   }
 }
 
 val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
   publishMavenStyle := true,
-  bintrayOrganization := Some("websudos"),
+  bintrayOrganization := Some("outworkers"),
   bintrayRepository := "oss-releases",
   bintrayReleaseOnPublish := true,
   publishArtifact in Test := false,
@@ -62,7 +73,7 @@ val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
 )
 
 val sharedSettings: Seq[Def.Setting[_]] = Seq(
-  organization := "com.websudos",
+  organization := "com.outworkers",
   version := "0.3.0",
   scalaVersion := "2.11.8",
   crossScalaVersions := Seq("2.10.6", "2.11.8"),
@@ -70,7 +81,6 @@ val sharedSettings: Seq[Def.Setting[_]] = Seq(
     Resolver.typesafeRepo("releases"),
     Resolver.sonatypeRepo("releases"),
     Resolver.jcenterRepo,
-    Resolver.bintrayRepo("websudos", "oss-releases"),
     "Twitter Repository" at "http://maven.twttr.com"
   ),
   scalacOptions ++= Seq(
@@ -99,10 +109,7 @@ lazy val morpheus = (project in file("."))
   ).aggregate(
     morpheusDsl,
     morpheusMySQL,
-    // morpheusPostgres,
-    // morpheusSpark,
     morpheusTestkit
-    // morpheusZookeeper
   )
 
   lazy val morpheusDsl = (project in file("morpheus-dsl"))
@@ -111,11 +118,10 @@ lazy val morpheus = (project in file("."))
       name := "morpheus-dsl",
       moduleName := "morpheus-dsl",
       libraryDependencies ++= Seq(
-        "com.twitter" %% "util-core" % Versions.twitterUtil,
+        "com.twitter" %% "util-core" % Versions.twitterUtil(scalaVersion.value),
+        "com.outworkers" %% "diesel-reflection" % Versions.diesel,
         "org.slf4j" % "slf4j-api" % Versions.slf4j,
-        "com.websudos" %% "diesel-engine" % Versions.diesel,
         "com.chuusai" %% "shapeless" % Versions.shapeless,
-        "org.scala-lang" % "scala-reflect" % scalaVersion.value,
         "joda-time" % "joda-time" % Versions.joda,
         "org.joda" % "joda-convert" % Versions.jodaConvert,
         "net.liftweb" %% "lift-json" % liftVersion(scalaVersion.value) % Test
@@ -130,7 +136,7 @@ lazy val morpheus = (project in file("."))
       moduleName := "morpheus-mysql",
       name := "morpheus-mysql",
       libraryDependencies ++= Seq(
-        "com.twitter" %% "finagle-mysql" % Versions.finagle
+        "com.twitter" %% "finagle-mysql" % Versions.finagle(scalaVersion.value)
       )
     ).dependsOn(
       morpheusDsl,
@@ -150,33 +156,6 @@ lazy val morpheus = (project in file("."))
       morpheusTestkit % Test
     )
 
-/*
-  lazy val morpheusZookeeper = Project(
-    id = "morpheus-zookeeper",
-    base = file("morpheus-zookeeper"),
-    settings = Defaults.coreDefaultSettings ++ sharedSettings
-  ).settings(
-    name := "morpheus-zookeeper",
-    libraryDependencies ++= Seq(
-      "com.twitter"                  %% "finagle-zookeeper"                 % FinagleZkVersion,
-      "com.websudos"                 %% "util-zookeeper"                    % UtilVersion
-    )
-  )
-
-  lazy val morpheusSpark = Project(
-    id = "morpheus-spark",
-    base = file("morpheus-spark"),
-    settings = Defaults.coreDefaultSettings ++ sharedSettings
-  ).settings(
-    name := "morpheus-spark",
-    libraryDependencies ++= Seq(
-      "org.apache.spark"             %% "spark-sql"                    % SparkVersion
-    )
-  ).dependsOn(
-    morpheusTestkit
-  )*/
-
-
   lazy val morpheusTestkit = (project in file("morpheus-testkit"))
     .settings(sharedSettings: _*)
     .settings(
@@ -187,6 +166,4 @@ lazy val morpheus = (project in file("."))
         ExclusionRule("org.scala-lang", "scala-reflect")
       }
     )
-  ).dependsOn(
-    // morpheusZookeeper
   )
