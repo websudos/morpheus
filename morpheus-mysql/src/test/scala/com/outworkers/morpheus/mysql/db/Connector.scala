@@ -49,7 +49,7 @@ object Connector {
     .newRichClient("127.0.0.1:3306")
 
   def initialise(): Unit = {
-    if (isRunningUnderTravis && init.compareAndSet(false, true)) {
+    if (!isRunningUnderTravis && init.compareAndSet(false, true)) {
       logger.info("Initialising process database")
       val procs = List(
         s"""mysql -e "CREATE DATABASE IF NOT EXISTS $databaseName;" """,
@@ -103,7 +103,7 @@ trait BaseSuite extends Waiters
 
   override def beforeAll(): Unit = {
     super.beforeAll()
-    Connector.initialise()
+    // Connector.initialise()
   }
 }
 
