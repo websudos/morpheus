@@ -106,7 +106,7 @@ private[morpheus] trait SelectTable[
     val t = this.asInstanceOf[Owner]
     val c1: SelectColumn[T1] = f1(t)
     val c2: SelectColumn[T2] = f2(t)
-    def rowFunc(row: Row): (T1, T2) = Tuple2(c1(row), c2(row))
+    def rowFunc(row: Row): (T1, T2) = c1(row) -> c2(row)
 
     createRootSelect[Owner, (T1, T2)](
       this.asInstanceOf[Owner],

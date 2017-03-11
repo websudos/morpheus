@@ -34,7 +34,7 @@ private[morpheus] class SelectSyntaxBlock(
 ) extends engine.query.AbstractSelectSyntaxBlock(query, tableName, columns) {
   override val syntax = Syntax
 
-  private[this] def selector(quantifier: String, columns: List[String], table: String): SQLBuiltQuery = {
+  def selector(quantifier: String, columns: List[String], table: String): SQLBuiltQuery = {
     qb.pad.append(quantifier)
       .pad.append(columns.mkString(", "))
       .pad.append(syntax.from)

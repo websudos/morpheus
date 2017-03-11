@@ -37,19 +37,19 @@ object Connector {
   def isRunningUnderTravis: Boolean = sys.env.contains("TRAVIS")
 
   private[this] val databaseName = "morpheus_test"
-  private[this] val user = if (isRunningUnderTravis) "travis" else "morpheus"
-  private[this] val pwd = "morpheus23!"
+  private[this] val user = if (isRunningUnderTravis) "travis" else "root"
+  private[this] val pwd = if (isRunningUnderTravis) "morpheus23!" else ""
 
   /**
    * This client is meant to connect to the Travis CI default MySQL service.
    */
   lazy val client = Mysql.client
     .withCredentials(user, pwd)
-    .withDatabase("morpheus_test")
+    .withDatabase(databaseName)
     .newRichClient("127.0.0.1:3306")
 
   def initialise(): Unit = {
-    if (!isRunningUnderTravis && init.compareAndSet(false, true)) {
+    if (isRunningUnderTravis && init.compareAndSet(false, true)) {
       logger.info("Initialising process database")
       val procs = List(
         s"""mysql -e "CREATE DATABASE IF NOT EXISTS $databaseName;" """,

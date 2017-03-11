@@ -43,7 +43,7 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite {
     }
   }
 
-  it should "insert and select a record with all the primitive types in MySQL" in {
+  ignore should "insert and select a record with all the primitive types in MySQL" in {
     val sample = gen[PrimitiveRecord]
 
     val chain = for {

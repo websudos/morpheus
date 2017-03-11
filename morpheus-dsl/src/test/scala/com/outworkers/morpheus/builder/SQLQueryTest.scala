@@ -198,7 +198,9 @@ class SQLQueryTest extends FlatSpec with Matchers with GeneratorDrivenPropertyCh
 
   it should "append and wrap a SQLBuiltQuery with ()" in {
     forAll { (q1: String, q2: String) =>
-      SQLBuiltQuery(q1).wrap(SQLBuiltQuery(q2)).queryString shouldEqual s"$q1 ($q2)"
+      whenever(q2.nonEmpty) {
+        SQLBuiltQuery(q1).wrap(SQLBuiltQuery(q2)).queryString shouldEqual s"$q1 ($q2)"
+      }
     }
   }
 
