@@ -62,11 +62,11 @@ trait DefaultImportsDefinition extends DefaultForeignKeyConstraints {
     TableRow <: Row
   ] = com.outworkers.morpheus.dsl.BaseTable[Owner, Record, TableRow]
 
-  type PrimaryKey[ValueType] = com.outworkers.morpheus.keys.PrimaryKey[ValueType]
-  type UniqueKey[ValueType] = com.outworkers.morpheus.keys.UniqueKey[ValueType]
+  type PrimaryKey = com.outworkers.morpheus.keys.PrimaryKey
+  type UniqueKey = com.outworkers.morpheus.keys.UniqueKey
   type NotNull = com.outworkers.morpheus.keys.NotNull
   type Autoincrement = com.outworkers.morpheus.keys.Autoincrement
-  type Zerofill[ValueType] = com.outworkers.morpheus.keys.Zerofill[ValueType]
+  type Zerofill = com.outworkers.morpheus.keys.Zerofill
 
   implicit def columnToQueryColumn[T : DataType](col: AbstractColumn[T]): AbstractQueryColumn[T]
 

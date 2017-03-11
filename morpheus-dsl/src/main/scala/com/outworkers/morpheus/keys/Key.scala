@@ -19,8 +19,7 @@ import com.outworkers.morpheus.column.NumericColumn
 import com.outworkers.morpheus.builder.{DefaultSQLSyntax, SQLBuiltQuery}
 import com.outworkers.morpheus.column.AbstractColumn
 
-private[morpheus] trait Key[ValueType, KeyType <: Key[ValueType, KeyType]] {
-  self: AbstractColumn[ValueType] =>
+private[morpheus] trait Key[KeyType <: Key[KeyType]] { self: AbstractColumn[_] =>
 
   override def qb: SQLBuiltQuery = {
     SQLBuiltQuery(name).pad.append(sqlType)
@@ -39,33 +38,30 @@ private[morpheus] trait Key[ValueType, KeyType <: Key[ValueType, KeyType]] {
   protected[this] val autoIncrement = false
 }
 
-trait PrimaryKey[ValueType] extends Key[ValueType, PrimaryKey[ValueType]] {
-  self: AbstractColumn[ValueType] =>
+trait PrimaryKey extends Key[PrimaryKey] {
+  self: AbstractColumn[_] =>
 
   protected[this] def keyToQueryString = DefaultSQLSyntax.primaryKey
 }
 
-trait UniqueKey[ValueType] extends Key[ValueType, UniqueKey[ValueType]] {
-  self: AbstractColumn[ValueType] =>
+trait UniqueKey extends Key[UniqueKey] {
+  self: AbstractColumn[_] =>
 
   protected[this] def keyToQueryString = DefaultSQLSyntax.uniqueKey
 
 }
 
-trait NotNull {
-  self: AbstractColumn[_] =>
+trait NotNull { self: AbstractColumn[_] =>
 
-  override val notNull = true
+  override def notNull: Boolean = true
 }
 
-trait Autoincrement {
-  self: Key[Int, _] with AbstractColumn[Int] =>
+trait Autoincrement { self: AbstractColumn[Int] with PrimaryKey =>
 
   override protected[this] val autoIncrement = true
 }
 
-trait Zerofill[ValueType] extends Key[ValueType, Zerofill[ValueType]] {
-  self: NumericColumn[_, _, _, ValueType] =>
+trait Zerofill extends Key[Zerofill] { self: NumericColumn[_, _, _, _] =>
 
   override def qb: SQLBuiltQuery = {
     SQLBuiltQuery(name).pad.append(sqlType)
@@ -87,8 +83,7 @@ trait Zerofill[ValueType] extends Key[ValueType, Zerofill[ValueType]] {
 
 }
 
-trait Unsigned[ValueType] {
-  self: NumericColumn[_, _, _, ValueType] =>
+trait Unsigned[ValueType] { self: NumericColumn[_, _, _, ValueType] =>
 
-  override def unsigned = true
+  override def unsigned: Boolean = true
 }

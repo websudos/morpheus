@@ -23,7 +23,7 @@ case class IndexedRecord(id: Int, value: Long)
 
 sealed class IndexTable extends Table[IndexTable, IndexedRecord] {
 
-  object id extends SmallIntColumn(this) with PrimaryKey[Int] with NotNull with Autoincrement
+  object id extends SmallIntColumn(this) with PrimaryKey with NotNull with Autoincrement
 
   object value extends IntColumn(this)
 
@@ -43,13 +43,13 @@ case class KeysRecord(id: Int)
 
 sealed class KeysTable extends Table[KeysTable, KeysRecord] {
 
-  object id extends IntColumn(this) with PrimaryKey[Int]
+  object id extends IntColumn(this) with PrimaryKey
 
-  object notNullId extends IntColumn(this) with PrimaryKey[Int] with NotNull
+  object notNullId extends IntColumn(this) with PrimaryKey with NotNull
 
-  object autoincrementedId extends IntColumn(this) with PrimaryKey[Int] with Autoincrement
+  object autoincrementedId extends IntColumn(this) with PrimaryKey with Autoincrement
 
-  object indexId extends IntColumn(this) with PrimaryKey[Int] with NotNull with Autoincrement
+  object indexId extends IntColumn(this) with PrimaryKey with NotNull with Autoincrement
 
   object foreignKey extends ForeignKey[KeysTable, KeysRecord, IndexTable](this, IndexTable.id, IndexTable.value)
 
@@ -76,8 +76,8 @@ sealed class KeysTable extends Table[KeysTable, KeysRecord] {
     override def onDelete = SetNull
   }
 
-  object uniqueIndex extends TextColumn(this) with UniqueKey[String]
-  object uniqueIndexNotNull extends TextColumn(this) with UniqueKey[String] with NotNull
+  object uniqueIndex extends TextColumn(this) with UniqueKey
+  object uniqueIndexNotNull extends TextColumn(this) with UniqueKey with NotNull
 
   /**
    * The most notable and honorable of functions in this file, this is what allows our DSL to provide type-safety.
@@ -168,7 +168,7 @@ case class EnumerationRecord(
 
 class EnumerationTable extends Table[EnumerationTable, EnumerationRecord] {
 
-  object id extends IntColumn(this) with PrimaryKey[Int] with Autoincrement with NotNull
+  object id extends IntColumn(this) with PrimaryKey with Autoincrement with NotNull
 
   object enum extends EnumColumn[EnumerationTable, EnumerationRecord, TestEnumeration](this, TestEnumeration)
 

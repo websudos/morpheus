@@ -45,7 +45,7 @@ case class PrimitiveRecord(
 )
 
 class PrimitivesTable extends Table[PrimitivesTable, PrimitiveRecord] {
-  object id extends IntColumn(this) with PrimaryKey[Int] with Autoincrement with NotNull
+  object id extends IntColumn(this) with PrimaryKey with Autoincrement with NotNull
   object num extends IntColumn(this)
   object double extends DoubleColumn(this)
   object float extends FloatColumn(this)

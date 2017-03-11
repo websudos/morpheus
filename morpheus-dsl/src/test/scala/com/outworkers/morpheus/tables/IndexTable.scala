@@ -22,7 +22,7 @@ case class IndexedRecord(id: Int, value: Long)
 
 sealed class IndexTable extends Table[IndexTable, IndexedRecord] {
 
-  object id extends SmallIntColumn(this) with PrimaryKey[Int] with NotNull with Autoincrement
+  object id extends SmallIntColumn(this) with PrimaryKey with NotNull with Autoincrement
 
   object value extends LongColumn(this)
 
@@ -42,13 +42,13 @@ case class KeysRecord(id: Int)
 
 sealed class KeysTable extends Table[KeysTable, KeysRecord] {
 
-  object id extends IntColumn(this) with PrimaryKey[Int]
+  object id extends IntColumn(this) with PrimaryKey
 
-  object notNullId extends IntColumn(this) with PrimaryKey[Int] with NotNull
+  object notNullId extends IntColumn(this) with PrimaryKey with NotNull
 
-  object autoincrementedId extends IntColumn(this) with PrimaryKey[Int] with Autoincrement
+  object autoincrementedId extends IntColumn(this) with PrimaryKey with Autoincrement
 
-  object indexId extends IntColumn(this) with PrimaryKey[Int] with NotNull with Autoincrement
+  object indexId extends IntColumn(this) with PrimaryKey with NotNull with Autoincrement
 
   object foreignKey extends ForeignKey[KeysTable, KeysRecord, IndexTable](this, IndexTable.id, IndexTable.value)
 
@@ -75,8 +75,8 @@ sealed class KeysTable extends Table[KeysTable, KeysRecord] {
     override def onDelete = SetNull
   }
 
-  object uniqueIndex extends TextColumn(this) with UniqueKey[String]
-  object uniqueIndexNotNull extends TextColumn(this) with UniqueKey[String] with NotNull
+  object uniqueIndex extends TextColumn(this) with UniqueKey
+  object uniqueIndexNotNull extends TextColumn(this) with UniqueKey with NotNull
 
 
 
@@ -143,10 +143,10 @@ object StringsTable extends StringsTable
 
 class ZeroFillTable extends Table[ZeroFillTable, Int] {
 
-  object tinyInt extends TinyIntColumn(this) with Zerofill[Int] with Unsigned[Int] with NotNull
-  object tinyIntLimited extends TinyIntColumn(this, 5) with Zerofill[Int] with NotNull
+  object tinyInt extends TinyIntColumn(this) with Zerofill with Unsigned[Int] with NotNull
+  object tinyIntLimited extends TinyIntColumn(this, 5) with Zerofill with NotNull
 
-  object smallInt extends SmallIntColumn(this) with Zerofill[Int] with Unsigned[Int]
+  object smallInt extends SmallIntColumn(this) with Zerofill with Unsigned[Int]
   object smallIntLimited extends SmallIntColumn(this, 5)
 
 
