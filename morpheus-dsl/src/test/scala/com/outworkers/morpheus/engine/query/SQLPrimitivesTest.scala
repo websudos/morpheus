@@ -15,6 +15,127 @@
  */
 package com.outworkers.morpheus.engine.query
 
-import org.scalatest.{Matchers, FlatSpec}
+import java.util.Date
 
-class SQLPrimitivesTest extends FlatSpec with Matchers {}
+import com.outworkers.morpheus._
+import com.outworkers.morpheus.builder.DefaultQueryBuilder
+import com.outworkers.morpheus.helpers.TestRow
+import com.outworkers.util.samplers.Sample
+import com.outworkers.util.testing._
+import org.joda.time.DateTime
+import org.scalacheck.Arbitrary
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.{FlatSpec, Matchers}
+
+import scala.util.{Success, Try}
+
+class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks {
+
+  it should "serialize and deserialize an Int" in {
+    val primitive = new DefaultIntPrimitive
+
+    forAll { value: Int =>
+
+      val row = new TestRow {
+        override def int(name: String): Try[Int] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a Double" in {
+    val primitive = new DefaultDoublePrimitive
+
+    forAll { value: Double =>
+
+      val row = new TestRow {
+        override def double(name: String): Try[Double] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a Float" in {
+    val primitive = new DefaultFloatPrimitive
+
+    forAll { value: Float =>
+
+      val row = new TestRow {
+        override def float(name: String): Try[Float] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a Long" in {
+    val primitive = new DefaultLongPrimitive
+
+    forAll { value: Long =>
+
+      val row = new TestRow {
+        override def long(name: String): Try[Long] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a Date" in {
+    val primitive = new DefaultDatePrimitive
+
+    implicit val dateSampler: Arbitrary[Date] = Sample.arbitrary[Date]
+
+    forAll { value: Date =>
+
+      val row = new TestRow {
+        override def date(name: String): Try[Date] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a DateTime" in {
+    val primitive = new DefaultDateTimePrimitive
+
+    implicit val dateSampler: Arbitrary[DateTime] = Sample.arbitrary[DateTime]
+
+    forAll { value: DateTime =>
+
+      val row = new TestRow {
+        override def datetime(name: String): Try[DateTime] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual value.toString
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+
+  it should "serialize and deserialize a String" in {
+    val primitive = new DefaultStringPrimitive
+
+    forAll { value: String =>
+      val row = new TestRow {
+        override def string(name: String): Try[String] = Success(value)
+      }
+
+      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escape(value)
+
+      primitive.deserialize(row, "") shouldEqual Success(value)
+    }
+  }
+}
