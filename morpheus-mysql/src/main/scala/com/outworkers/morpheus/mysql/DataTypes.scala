@@ -15,13 +15,7 @@
  */
 package com.outworkers.morpheus.mysql
 
-import java.util.Date
-
 import com.outworkers.morpheus._
-import com.outworkers.morpheus._
-import org.joda.time.DateTime
-
-import scala.util.Try
 
 object DataTypes {
   object Real {
@@ -33,33 +27,21 @@ object DataTypes {
 
 trait DataTypes {
 
-  def apply[RR](implicit ev: DataType[RR]): DataType[RR] = ev
+  implicit object IntPrimitive extends DefaultIntPrimitive
 
-  implicit object IntPrimitive extends DefaultIntPrimitive {
-    def fromRow(row: Row, name: String): Try[Int] = row.int(name)
-  }
+  implicit object FloatPrimitive extends DefaultFloatPrimitive
 
-  implicit object FloatPrimitive extends DefaultFloatPrimitive {
-    def fromRow(row: Row, name: String): Try[Float] = row.float(name)
-  }
+  implicit object DoublePrimitive extends DefaultDoublePrimitive
 
-  implicit object DoublePrimitive extends DefaultDoublePrimitive {
-    def fromRow(row: Row, name: String): Try[Double] = row.double(name)
-  }
+  implicit object LongPrimitive extends DefaultLongPrimitive
 
-  implicit object LongPrimitive extends DefaultLongPrimitive {
-    def fromRow(row: Row, name: String): Try[Long] = row.long(name)
-  }
+  implicit object DatePrimitive extends DefaultDatePrimitive
 
-  implicit object DatePrimitive extends DefaultDatePrimitive {
-    def fromRow(row: Row, name: String): Try[Date] = row.date(name)
-  }
+  implicit object SqlDatePrimitive extends DefaultSqlDatePrimitive
 
-  implicit object DateTimePrimitive extends DefaultDateTimePrimitive {
-    def fromRow(row: Row, name: String): Try[DateTime] = row.datetime(name)
-  }
+  implicit object DateTimePrimitive extends DefaultDateTimePrimitive
 
-  implicit object StringPrimitive extends DefaultStringPrimitive {
-    def fromRow(row: Row, name: String): Try[String] = row.string(name)
-  }
+  implicit object ShortPrimitive extends DefaultShortPrimitive
+
+  implicit object StringPrimitive extends DefaultStringPrimitive
 }

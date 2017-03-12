@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.outworkers.morpheus.postgres
+package com.outworkers.morpheus.mysql
 
-import com.outworkers.morpheus.builder.{AbstractQueryBuilder, AbstractSQLSyntax, SQLOperatorSet}
+import com.twitter.finagle.exp.mysql.{ Field, Value, Row => FinagleRow }
 
-sealed class PostgresOperatorSet extends SQLOperatorSet {
+trait EmptyRow extends FinagleRow {
+  override val fields: IndexedSeq[Field] = IndexedSeq.empty[Field]
+  override val values: IndexedSeq[Value] = IndexedSeq.empty[Value]
 
+  def apply(columnName: String): Option[Value]
+
+  override def indexOf(columnName: String): Option[Int] = None
 }
-
-object PostgresOperatorSet extends PostgresOperatorSet
-
-
-sealed class PostgresQueryBuilder extends AbstractQueryBuilder {
-  val operators: SQLOperatorSet = PostgresOperatorSet
-
-  val syntax: AbstractSQLSyntax = PostgresSyntax
-}
-
-object PostgresQueryBuilder extends PostgresQueryBuilder

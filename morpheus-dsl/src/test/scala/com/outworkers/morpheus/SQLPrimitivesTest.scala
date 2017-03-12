@@ -40,6 +40,4 @@ class SQLPrimitivesTest extends FlatSpec with Matchers {
     val query = implicitly[DataType[Int]].serialize(value)
     query shouldEqual s"${value.toString}"
   }
-
-
 }

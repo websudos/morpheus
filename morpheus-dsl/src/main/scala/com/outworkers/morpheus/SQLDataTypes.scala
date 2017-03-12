@@ -15,9 +15,13 @@
  */
 package com.outworkers.morpheus
 
+import java.sql.{ Date => SqlDate }
 import java.util.Date
 
-import com.outworkers.morpheus.builder.{DefaultQueryBuilder, DefaultSQLDataTypes}
+import com.outworkers.morpheus.builder.{
+  DefaultQueryBuilder,
+  DefaultSQLDataTypes
+}
 import org.joda.time.DateTime
 
 import scala.util.Try
@@ -58,14 +62,24 @@ trait DataType[T] {
   def deserialize(row: Row, name: String): Try[T]
 }
 
+object DataType {
+  def apply[T]()(implicit ev: DataType[T]): DataType[T] = ev
+}
+
 class DefaultIntPrimitive extends DataType[Int] {
   override def sqlType: String = DefaultSQLDataTypes.int
 
-  override def serialize(value: Int): String = {
-    value.toString
-  }
+  override def serialize(value: Int): String = value.toString
 
   def deserialize(row: Row, name: String): Try[Int] = row.int(name)
+}
+
+class DefaultShortPrimitive extends DataType[Short] {
+  override def sqlType: String = DefaultSQLDataTypes.short
+
+  override def serialize(value: Short): String = value.toString
+
+  def deserialize(row: Row, name: String): Try[Short] = row.short(name)
 }
 
 class DefaultFloatPrimitive extends DataType[Float] {
@@ -90,6 +104,14 @@ class DefaultLongPrimitive extends DataType[Long] {
   override def serialize(value: Long): String = value.toString
 
   def deserialize(row: Row, name: String): Try[Long] = row.long(name)
+}
+
+class DefaultSqlDatePrimitive extends DataType[SqlDate] {
+  def sqlType: String = DefaultSQLDataTypes.date
+
+  def serialize(value: SqlDate): String = value.toString
+
+  def deserialize(row: Row, name: String): Try[SqlDate] = row.sqlDate(name)
 }
 
 class DefaultDatePrimitive extends DataType[Date] {
@@ -118,17 +140,19 @@ class DefaultStringPrimitive extends DataType[String] {
 }
 
 trait DefaultDataTypes {
-  implicit case object IntPrimitive extends DefaultIntPrimitive
+  implicit object IntPrimitive extends DefaultIntPrimitive
 
-  implicit case object StringPrimitive extends DefaultStringPrimitive
+  implicit object StringPrimitive extends DefaultStringPrimitive
 
-  implicit case object FloatPrimitive extends DefaultFloatPrimitive
+  implicit object FloatPrimitive extends DefaultFloatPrimitive
 
-  implicit case object DatePrimitive extends DefaultDatePrimitive
+  implicit object SqlDatePrimitive extends DefaultSqlDatePrimitive
 
-  implicit case object DateTimePrimitive extends DefaultDateTimePrimitive
+  implicit object DatePrimitive extends DefaultDatePrimitive
 
-  implicit case object DoublePrimitive extends DefaultDoublePrimitive
+  implicit object DateTimePrimitive extends DefaultDateTimePrimitive
 
-  implicit case object LongPrimitive extends DefaultLongPrimitive
+  implicit object DoublePrimitive extends DefaultDoublePrimitive
+
+  implicit object LongPrimitive extends DefaultLongPrimitive
 }

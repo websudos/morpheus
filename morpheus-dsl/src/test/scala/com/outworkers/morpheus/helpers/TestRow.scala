@@ -17,6 +17,7 @@ package com.outworkers.morpheus.helpers
 
 import java.nio.ByteBuffer
 import java.util.Date
+import java.sql.{ Date => SqlDate }
 
 import com.outworkers.morpheus.Row
 
@@ -42,6 +43,8 @@ class TestRow extends Row {
   override def short(name: String): Try[Short] = failWith("Short extraction not implemented")
 
   override def date(name: String): Try[Date] = failWith("Date extraction not implemented")
+
+  override def sqlDate(name: String): Try[SqlDate] = failWith("Date extraction not implemented")
 
   override def float(name: String): Try[Float] = failWith("Float extraction not implemented")
 

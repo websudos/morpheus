@@ -17,13 +17,20 @@ package com.outworkers.morpheus
 package mysql
 
 import java.nio.ByteBuffer
+import java.sql.{ Date => SqlDate }
 import java.util.Date
 
 import com.outworkers.morpheus.builder.{AbstractQueryBuilder, AbstractSQLSyntax, SQLOperatorSet}
 import com.outworkers.morpheus.column.AbstractColumn
 import com.outworkers.morpheus.engine.query.AbstractQueryColumn
 import com.outworkers.morpheus.{Client => RootClient, Result => BaseResult, Row => BaseRow}
-import com.twitter.finagle.exp.mysql.{Client => FinagleClient, Result => FinagleResult, ResultSet => FinagleResultSet, Row => FinagleRow, _}
+import com.twitter.finagle.exp.mysql.{
+  Client => FinagleClient,
+  Result => FinagleResult,
+  ResultSet => FinagleResultSet,
+  Row => FinagleRow,
+  _
+}
 import com.twitter.finagle.exp.{mysql => fsql}
 import com.twitter.util.Future
 
@@ -60,7 +67,7 @@ case class Row(res: FinagleRow) extends BaseRow {
 
   override def date(name: String): Try[Date] = {
     extract(name) {
-      case Some(DateValue(value)) => Success(value)
+      case Some(DateValue(value)) => Success(new Date(value.toInstant.toEpochMilli))
       case x @ _ => Failure(new Exception(s"Invalid value $name for column $name, expected int, got $x"))
     }
   }
@@ -112,6 +119,13 @@ case class Row(res: FinagleRow) extends BaseRow {
     extract(name) {
       case Some(fsql.RawValue(typ, charset, isBinary, bytes)) => Success(ByteBuffer.wrap(bytes))
       case x @ _ => Failure(new Exception(s"Invalid value $name for column $name, expected ByteArray, got $x"))
+    }
+  }
+
+  override def sqlDate(name: String): Try[SqlDate] = {
+    extract(name) {
+      case Some(DateValue(value)) => Success(value)
+      case x @ _ => Failure(new Exception(s"Invalid value $name for column $name, expected int, got $x"))
     }
   }
 }

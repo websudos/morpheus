@@ -15,10 +15,86 @@
  */
 package com.outworkers.morpheus.mysql
 
-import org.scalatest.{FlatSpec, Matchers}
+import java.sql.{Date => SqlDate}
+import java.util.Date
 
-class DatatypesTest extends FlatSpec with Matchers {
-  it should "parse an int from a row" in {
-    val row = com.twitter.finagle.exp.mysql.StringValue
+import com.outworkers.morpheus.builder.DefaultQueryBuilder
+import com.outworkers.morpheus.mysql.dsl._
+import com.outworkers.morpheus.{CustomSamplers, DataType}
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
+import org.scalatest.{Assertion, FlatSpec, Matchers, TryValues}
+import com.twitter.finagle.exp.mysql._
+import org.scalacheck.Arbitrary
+
+class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks with CustomSamplers with TryValues {
+
+  def defaultFn[T]: T => String = _.toString
+
+  def dataTypeTest[T : DataType : Arbitrary](
+    applier: T => Value,
+    outcome: T => String = defaultFn[T]
+  ): Assertion = {
+    val dt = DataType[T]
+    forAll { (obj: T, column: String) =>
+      val value = applier(obj)
+
+      val row = Row(new EmptyRow {
+        override def apply(columnName: String): Option[Value] = Some(value)
+      })
+
+      dt.serialize(obj) shouldEqual outcome(obj)
+      dt.deserialize(row, column).success.value shouldEqual obj
+    }
+  }
+
+  it should "parse a String from a row" in {
+    dataTypeTest[String](StringValue.apply, DefaultQueryBuilder.escape)
+  }
+
+  it should "parse an Int from a row" in {
+    dataTypeTest[Int](IntValue.apply)
+  }
+
+  it should "parse a Long from a row" in {
+    dataTypeTest[Long](LongValue.apply)
+  }
+
+  it should "parse a Double from a row" in {
+    dataTypeTest[Double](DoubleValue.apply)
+  }
+
+  it should "parse a Float from a row" in {
+    dataTypeTest[Float](FloatValue.apply)
+  }
+
+  it should "parse a Short from a row" in {
+    dataTypeTest[Short](ShortValue.apply)
+  }
+
+  it should "parse a Date from a row" in {
+    forAll { (date: Date, column: String) =>
+      val value = DateValue(date.asSql)
+
+      val row = Row(new EmptyRow {
+        override def apply(columnName: String): Option[Value] = Some(value)
+      })
+
+      DataType[Date].serialize(date) shouldEqual date.toString
+      DataType[Date].deserialize(row, column).success.value.getTime shouldEqual date.getTime
+    }
+  }
+
+  it should "parse an SqlDate from a row" in {
+
+    forAll { (date: SqlDate, column: String) =>
+      val value = DateValue(date)
+
+      val row = Row(new EmptyRow {
+        override def apply(columnName: String): Option[Value] = Some(value)
+      })
+
+      DataType[SqlDate].serialize(date) shouldEqual date.toString
+      DataType[SqlDate].deserialize(row, column).success.value shouldEqual date
+    }
   }
 }

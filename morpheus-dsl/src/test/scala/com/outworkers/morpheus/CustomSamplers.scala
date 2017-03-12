@@ -13,10 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.outworkers.morpheus.postgres
+package com.outworkers.morpheus
 
-import com.outworkers.morpheus.builder.AbstractSQLSyntax
+import java.sql.{ Date => SqlDate }
+import java.util.Date
 
-sealed trait PostgresSyntax extends AbstractSQLSyntax {}
+import org.joda.time.{DateTime, DateTimeZone}
+import org.scalacheck.{Arbitrary, Gen}
 
-object PostgresSyntax extends PostgresSyntax
+trait CustomSamplers {
+  implicit val dateGen: Arbitrary[Date] = Arbitrary(Gen.delay(new Date(new DateTime(DateTimeZone.UTC).getMillis)))
+
+  implicit val sqlDateGen: Arbitrary[SqlDate] = Arbitrary(Gen.delay(new SqlDate(new DateTime(DateTimeZone.UTC).getMillis)))
+
+  implicit class JavaDateAug(val dt: Date) {
+    def asSql: SqlDate = new SqlDate(dt.getTime)
+  }
+}

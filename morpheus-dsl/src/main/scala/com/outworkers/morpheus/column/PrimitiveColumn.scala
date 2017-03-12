@@ -22,6 +22,7 @@ import com.outworkers.morpheus.builder.SQLBuiltQuery
 import com.outworkers.morpheus.dsl.BaseTable
 import com.outworkers.morpheus.Row
 import org.joda.time.DateTime
+import java.sql.{ Date => SqlDate }
 
 import scala.annotation.implicitNotFound
 import scala.util.Try
@@ -57,6 +58,13 @@ class AbstractLongColumn[
   TableRow <: Row
 ](table: BaseTable[Owner, Record, TableRow])(implicit ev: DataType[Long])
   extends PrimitiveColumn[Owner, Record, TableRow, Long](table)
+
+class AbstractSqlDateColumn[
+  Owner <: BaseTable[Owner, Record, TableRow],
+  Record,
+  TableRow <: Row
+](table: BaseTable[Owner, Record, TableRow])(implicit ev: DataType[SqlDate])
+  extends PrimitiveColumn[Owner, Record, TableRow, SqlDate](table)
 
 class AbstractDateColumn[
   Owner <: BaseTable[Owner, Record, TableRow],

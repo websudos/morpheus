@@ -139,20 +139,7 @@ lazy val morpheus = (project in file("."))
         "com.twitter" %% "finagle-mysql" % Versions.finagle(scalaVersion.value)
       )
     ).dependsOn(
-      morpheusDsl,
-      morpheusTestkit % Test
-    )
-
-  lazy val morpheusPostgres = (project in file("morpheus-postgres"))
-    .settings(sharedSettings: _*)
-    .settings(
-      name := "morpheus-postgres",
-      moduleName := "morpheus-postgres",
-      libraryDependencies ++= Seq(
-        // "com.twitter" %% "finagle-postgres" % "0.1.0-SNAPSHOT"
-      )
-    ).dependsOn(
-      morpheusDsl,
+      morpheusDsl % "compile->compile;test->test;",
       morpheusTestkit % Test
     )
 

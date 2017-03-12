@@ -17,6 +17,7 @@ package com.outworkers.morpheus
 
 import java.nio.ByteBuffer
 import java.util.Date
+import java.sql.{ Date => SqlDate }
 
 import com.twitter.util.Future
 import org.joda.time.{DateTime, DateTimeZone}
@@ -41,7 +42,11 @@ trait Row {
 
   def date(name: String): Try[Date]
 
-  def datetime(name: String): Try[DateTime] = date(name) map(d => new DateTime(d, DateTimeZone.UTC))
+  def sqlDate(name: String): Try[SqlDate]
+
+  def datetime(name: String): Try[DateTime] = date(name) map {
+    d => new DateTime(d.toInstant.getEpochSecond, DateTimeZone.UTC)
+  }
 
   def float(name: String): Try[Float]
 

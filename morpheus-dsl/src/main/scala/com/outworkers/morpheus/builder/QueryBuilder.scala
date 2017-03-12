@@ -173,6 +173,7 @@ abstract class AbstractSQLDataTypes {
   val mediumInt = "MEDIUMINT"
   val bigInt = "BIGINT"
   val int = "INT"
+  val short = "SHORT"
   val decimal = "DECIMAL"
 
 

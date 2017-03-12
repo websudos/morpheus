@@ -15,7 +15,7 @@
  */
 package com.outworkers.morpheus.engine.query
 
-import java.util.Date
+import java.sql.Date
 
 import com.outworkers.morpheus._
 import com.outworkers.morpheus.builder.DefaultQueryBuilder
@@ -29,7 +29,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 import scala.util.{Success, Try}
 
-class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks {
+class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks with CustomSamplers {
 
   it should "serialize and deserialize an Int" in {
     val primitive = new DefaultIntPrimitive
@@ -93,8 +93,6 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
 
   it should "serialize and deserialize a Date" in {
     val primitive = new DefaultDatePrimitive
-
-    implicit val dateSampler: Arbitrary[Date] = Sample.arbitrary[Date]
 
     forAll { value: Date =>
 
