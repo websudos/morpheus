@@ -40,9 +40,7 @@ case class Result(result: FinagleResult) extends BaseResult
 
 case class Row(res: FinagleRow) extends BaseRow {
 
-  protected[this] def extract[T](column: String)(fn: Option[Value] => Try[T]): Try[T] = {
-    fn(res(column))
-  }
+  protected[this] def extract[T](column: String)(fn: Option[Value] => Try[T]): Try[T] = fn(res(column))
 
   override def string(name: String): Try[String] = {
     extract(name) {
@@ -67,7 +65,7 @@ case class Row(res: FinagleRow) extends BaseRow {
 
   override def date(name: String): Try[Date] = {
     extract(name) {
-      case Some(DateValue(value)) => Success(new Date(value.toInstant.toEpochMilli))
+      case Some(DateValue(value)) => Success(new Date(value.getTime))
       case x @ _ => Failure(new Exception(s"Invalid value $name for column $name, expected int, got $x"))
     }
   }

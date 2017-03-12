@@ -17,11 +17,11 @@ package com.outworkers.morpheus.mysql
 
 import com.twitter.finagle.exp.mysql.{ Field, Value, Row => FinagleRow }
 
-trait EmptyRow extends FinagleRow {
+class EmptyRow(fn: String => Option[Value]) extends FinagleRow {
   override val fields: IndexedSeq[Field] = IndexedSeq.empty[Field]
   override val values: IndexedSeq[Value] = IndexedSeq.empty[Value]
 
-  def apply(columnName: String): Option[Value]
+  override def apply(columnName: String): Option[Value] = fn(columnName)
 
   override def indexOf(columnName: String): Option[Int] = None
 }
