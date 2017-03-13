@@ -68,7 +68,7 @@ class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyC
     dataTypeTest[Short](ShortValue.apply)
   }
 
-  it should "parse a Date from a row" in {
+  ignore should "parse a Date from a row" in {
     val dt = DataType[Date]
 
     forAll { (date: Date, column: String) =>
