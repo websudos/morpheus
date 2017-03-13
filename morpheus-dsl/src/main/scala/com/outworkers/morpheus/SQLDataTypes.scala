@@ -117,7 +117,7 @@ class DefaultSqlDatePrimitive extends DataType[SqlDate] {
 class DefaultDatePrimitive extends DataType[Date] {
   def sqlType: String = DefaultSQLDataTypes.date
 
-  def serialize(value: Date): String = value.toString
+  def serialize(value: Date): String = value.getTime.toString
 
   def deserialize(row: Row, name: String): Try[Date] = row.date(name)
 }

@@ -20,9 +20,7 @@ import com.outworkers.diesel.reflection.EarlyInit
 import scala.reflect.runtime.universe.TypeTag
 
 abstract class SQLDatabase[
-  T <: BaseTable[T, R, TableRow] : TypeTag,
+  T <: BaseTable[T, R, TableRow],
   R,
   TableRow <: com.outworkers.morpheus.Row
-] extends EarlyInit[T] {
-  val columns = initialize()
-}
+] extends EarlyInit[T]
