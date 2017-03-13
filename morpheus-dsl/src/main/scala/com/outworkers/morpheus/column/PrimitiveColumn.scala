@@ -47,7 +47,7 @@ private[morpheus] class PrimitiveColumn[
 
   def toQueryString(v: RR): String = implicitly[DataType[RR]].serialize(v)
 
-  def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
+  def qb: SQLBuiltQuery = SQLBuiltQuery.empty.appendEscape(name).pad.append(sqlType)
 
   def optional(r: Row): Try[RR] = implicitly[DataType[RR]].deserialize(r, name)
 }

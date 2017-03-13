@@ -28,6 +28,8 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite {
   override def beforeAll(): Unit = {
     super.beforeAll()
     Await.result(BasicTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
+    Console.println(PrimitivesTable.create.ifNotExists.engine(InnoDB).queryString)
+    Await.result(PrimitivesTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
   }
 
   it should "store a record in the database and retrieve it by id" in {

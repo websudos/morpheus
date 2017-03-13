@@ -15,14 +15,13 @@
  */
 package com.outworkers.morpheus
 
-import java.sql.{ Date => SqlDate }
+import java.sql.{Date => SqlDate, Timestamp => SqlTimestamp}
+import java.text.SimpleDateFormat
 import java.util.Date
 
-import com.outworkers.morpheus.builder.{
-  DefaultQueryBuilder,
-  DefaultSQLDataTypes
-}
+import com.outworkers.morpheus.builder.{DefaultQueryBuilder, DefaultSQLDataTypes, SQLBuiltQuery}
 import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 
 import scala.util.Try
 import scala.util.control.NoStackTrace
@@ -85,7 +84,7 @@ class DefaultShortPrimitive extends DataType[Short] {
 class DefaultFloatPrimitive extends DataType[Float] {
   override def sqlType: String = DefaultSQLDataTypes.float
 
-  override def serialize(value: Float): String = value.toString
+  override def serialize(value: Float): String = DefaultQueryBuilder.escapeValue(value.toString)
 
   def deserialize(row: Row, name: String): Try[Float] = row.float(name)
 }
@@ -93,39 +92,56 @@ class DefaultFloatPrimitive extends DataType[Float] {
 class DefaultDoublePrimitive extends DataType[Double] {
   override def sqlType: String = DefaultSQLDataTypes.double
 
-  override def serialize(value: Double): String = value.toString
+  override def serialize(value: Double): String = DefaultQueryBuilder.escapeValue(value.toString)
 
   def deserialize(row: Row, name: String): Try[Double] = row.double(name)
+}
+
+private[morpheus] trait TimePrimitive {
+  protected[this] val mysqlDatePattern = "yyyy-MM-dd"
+  protected[this] val javaDateFormat = new SimpleDateFormat(mysqlDatePattern)
+  protected[this] val jodaDateFormat = DateTimeFormat.forPattern(mysqlDatePattern)
+  protected[this] val jodaDateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 }
 
 class DefaultLongPrimitive extends DataType[Long] {
   override def sqlType: String = DefaultSQLDataTypes.long
 
-  override def serialize(value: Long): String = value.toString
+  override def serialize(value: Long): String = DefaultQueryBuilder.escapeValue(value.toString)
 
   def deserialize(row: Row, name: String): Try[Long] = row.long(name)
 }
 
-class DefaultSqlDatePrimitive extends DataType[SqlDate] {
+class DefaultSqlDatePrimitive extends DataType[SqlDate] with TimePrimitive {
   def sqlType: String = DefaultSQLDataTypes.date
 
-  def serialize(value: SqlDate): String = value.toString
+  def serialize(value: SqlDate): String = javaDateFormat.format(new Date(value.getTime))
 
   def deserialize(row: Row, name: String): Try[SqlDate] = row.sqlDate(name)
 }
 
-class DefaultDatePrimitive extends DataType[Date] {
+class DefaultDatePrimitive extends DataType[Date] with TimePrimitive {
+
   def sqlType: String = DefaultSQLDataTypes.date
 
-  def serialize(value: Date): String = value.getTime.toString
+  def serialize(value: Date): String = DefaultQueryBuilder.escapeValue(javaDateFormat.format(value))
 
   def deserialize(row: Row, name: String): Try[Date] = row.date(name)
 }
 
-class DefaultDateTimePrimitive extends DataType[DateTime] {
+class DefaultTimestampPrimitive extends DataType[SqlTimestamp] with TimePrimitive {
   def sqlType: String = DefaultSQLDataTypes.dateTime
 
-  def serialize(value: DateTime): String = value.toString
+  def serialize(value: SqlTimestamp): String = value.getTime.toString
+
+  def deserialize(row: Row, name: String): Try[SqlTimestamp] = row.timestamp(name)
+}
+
+
+class DefaultDateTimePrimitive extends DataType[DateTime] with TimePrimitive {
+  def sqlType: String = DefaultSQLDataTypes.dateTime
+
+  def serialize(value: DateTime): String = DefaultQueryBuilder.escapeValue(value.toString(jodaDateTimeFormat))
 
   def deserialize(row: Row, name: String): Try[DateTime] = row.datetime(name)
 }
@@ -134,7 +150,7 @@ class DefaultStringPrimitive extends DataType[String] {
 
   override def sqlType: String = DefaultSQLDataTypes.text
 
-  override def serialize(value: String): String = DefaultQueryBuilder.escape(value)
+  override def serialize(value: String): String = DefaultQueryBuilder.escapeValue(value)
 
   def deserialize(row: Row, name: String): Try[String] = row.string(name)
 }
@@ -149,6 +165,8 @@ trait DefaultDataTypes {
   implicit object SqlDatePrimitive extends DefaultSqlDatePrimitive
 
   implicit object DatePrimitive extends DefaultDatePrimitive
+
+  implicit object TimestampPrimitive extends DefaultTimestampPrimitive
 
   implicit object DateTimePrimitive extends DefaultDateTimePrimitive
 

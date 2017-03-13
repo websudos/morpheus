@@ -30,8 +30,6 @@ private[morpheus] abstract class NumericColumn[
 
   override def sqlType: String = if (limit > 0) s"$numericType($limit)" else numericType
 
-  override def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
-
   def unsigned: Boolean = false
 }
 

@@ -15,16 +15,29 @@
  */
 package com.outworkers.morpheus
 
-import java.sql.{ Date => SqlDate }
+import java.sql.{Date => SqlDate}
 import java.util.Date
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait CustomSamplers {
+  val offset = 10000
+
   implicit val dateGen: Arbitrary[Date] = Arbitrary(Gen.delay(new Date(new DateTime(DateTimeZone.UTC).getMillis)))
 
   implicit val sqlDateGen: Arbitrary[SqlDate] = Arbitrary(Gen.delay(new SqlDate(new DateTime(DateTimeZone.UTC).getMillis)))
+
+  implicit val jodaGen: Arbitrary[DateTime] = Arbitrary {
+    for {
+      offset <- Gen.choose(-offset, offset)
+      now = DateTime.now(DateTimeZone.UTC)
+    } yield now.plusMillis(offset)
+  }
+
+  implicit class JodaDateAug(val dt: DateTime) {
+    def asSql: SqlDate = new SqlDate(dt.getMillis)
+  }
 
   implicit class JavaDateAug(val dt: Date) {
     def asSql: SqlDate = new SqlDate(dt.getTime)

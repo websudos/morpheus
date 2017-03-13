@@ -16,15 +16,16 @@
 package com.outworkers.morpheus.mysql
 
 import java.sql.{Date => SqlDate}
-import java.util.{Date, TimeZone}
+import java.util.Date
 
 import com.outworkers.morpheus.builder.DefaultQueryBuilder
 import com.outworkers.morpheus.mysql.dsl._
 import com.outworkers.morpheus.{CustomSamplers, DataType}
+import com.twitter.finagle.exp.mysql._
+import org.joda.time.DateTime
+import org.scalacheck.Arbitrary
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{Assertion, FlatSpec, Matchers, TryValues}
-import com.twitter.finagle.exp.mysql._
-import org.scalacheck.Arbitrary
 
 class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks with CustomSamplers with TryValues {
 
@@ -45,7 +46,7 @@ class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyC
   }
 
   it should "parse a String from a row" in {
-    dataTypeTest[String](StringValue.apply, DefaultQueryBuilder.escape)
+    dataTypeTest[String](StringValue.apply, DefaultQueryBuilder.escapeValue)
   }
 
   it should "parse an Int from a row" in {
@@ -75,7 +76,18 @@ class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyC
       val row = Row(new EmptyRow(_ => Some(DateValue(date.asSql))))
 
       dt.serialize(date) shouldEqual date.getTime.toString
-      //dt.deserialize(row, column).success.value.toString shouldEqual date.toString
+      dt.deserialize(row, column).success.value.toString shouldEqual date.toString
+    }
+  }
+
+  it should "parse a DateTime from a row" in {
+    val dt = DataType[DateTime]
+
+    forAll { (date: DateTime, column: String) =>
+      val row = Row(new EmptyRow(_ => Some(DateValue(date.asSql))))
+
+      dt.serialize(date) shouldEqual date.getMillis.toString
+      dt.deserialize(row, column).success.value shouldEqual date
     }
   }
 

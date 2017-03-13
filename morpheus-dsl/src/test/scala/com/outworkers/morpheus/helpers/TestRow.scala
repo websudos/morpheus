@@ -17,7 +17,7 @@ package com.outworkers.morpheus.helpers
 
 import java.nio.ByteBuffer
 import java.util.Date
-import java.sql.{ Date => SqlDate }
+import java.sql.{Timestamp, Date => SqlDate}
 
 import com.outworkers.morpheus.Row
 
@@ -51,4 +51,6 @@ class TestRow extends Row {
   override def long(name: String): Try[Long] = failWith("Long extraction not implemented")
 
   override def bigDecimal(name: String): Try[BigDecimal] = failWith("BigDecimal extraction not implemented")
+
+  override def timestamp(name: String): Try[Timestamp] = failWith("Timestamp extraction not implemented")
 }

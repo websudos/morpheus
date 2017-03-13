@@ -82,7 +82,7 @@ class SQLQueryTest extends FlatSpec with Matchers with GeneratorDrivenPropertyCh
 
   it should "escape a CQL query by surrounding it with ` pairs" in {
     forAll { q1: String =>
-      SQLBuiltQuery.empty.escape(q1) shouldEqual s"`$q1`"
+      SQLBuiltQuery.escape(q1) shouldEqual s"`$q1`"
     }
   }
 

@@ -221,14 +221,14 @@ private[morpheus] object DefaultQueryBuilder extends AbstractQueryBuilder {
     SQLBuiltQuery.empty.append(clauses.map(_.queryString).mkString(sep))
   }
 
-  def columns(list: List[SQLBuiltQuery]) = {
+  def columns(list: List[SQLBuiltQuery]): SQLBuiltQuery = {
     list match {
-      case head :: tail => SQLBuiltQuery.empty.wrapn(list.map(_.queryString))
+      case head :: tail => SQLBuiltQuery.empty.wrapEscape(list.map(_.queryString))
       case Nil => SQLBuiltQuery.empty
     }
   }
 
-  def values(list: List[SQLBuiltQuery]) = {
+  def values(list: List[SQLBuiltQuery]): SQLBuiltQuery = {
     list match {
       case head :: tail => SQLBuiltQuery(DefaultSQLSyntax.values).wrapn(list.map(_.queryString))
       case Nil => SQLBuiltQuery.empty
@@ -258,7 +258,9 @@ private[morpheus] trait AbstractQueryBuilder {
   def operators: SQLOperatorSet
   def syntax: AbstractSQLSyntax
 
-  def escape(str: String): String = s"'$str'"
+  def escapeValue(str: String): String = s"'$str'"
+
+  def sqlEscape(str: String): String = s"`$str`"
 
   def eqs(name: String, value: String): SQLBuiltQuery = {
     SQLBuiltQuery(name)
@@ -337,7 +339,6 @@ private[morpheus] trait AbstractQueryBuilder {
   def notIn[M[X] <: TraversableOnce[X]](name: String, values: M[String]): SQLBuiltQuery = {
     SQLBuiltQuery(name).pad.append(operators.notIn).wrap(values)
   }
-
 
   def select(tableName: String): SQLBuiltQuery = {
     SQLBuiltQuery(syntax.select)

@@ -147,7 +147,7 @@ abstract class AbstractEnumColumn[
     })
   }
 
-  override def toQueryString(v: EnumType#Value): String = DefaultQueryBuilder.escape(v.toString)
+  override def toQueryString(v: EnumType#Value): String = DefaultQueryBuilder.escapeValue(v.toString)
 
   override def qb: SQLBuiltQuery = SQLBuiltQuery(name).pad.append(sqlType)
 

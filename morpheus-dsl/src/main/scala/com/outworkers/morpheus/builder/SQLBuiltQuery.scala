@@ -29,7 +29,7 @@ case class SQLBuiltQuery(queryString: String) {
     instance(queryString + list.mkString(sep))
   }
 
-  def appendEscape(st: String): SQLBuiltQuery = append(escape(st))
+  def appendEscape(st: String): SQLBuiltQuery = append(SQLBuiltQuery.escape(st))
   def appendEscape(st: SQLBuiltQuery): SQLBuiltQuery = appendEscape(st.queryString)
 
   def terminate: SQLBuiltQuery = appendIfAbsent(";")
@@ -46,7 +46,6 @@ case class SQLBuiltQuery(queryString: String) {
   def prependIfAbsent(st: String): SQLBuiltQuery = if (queryString.startsWith(st)) instance(queryString) else prepend(st)
   def prependIfAbsent(st: SQLBuiltQuery): SQLBuiltQuery = prependIfAbsent(st.queryString)
 
-  def escape(st: String): String = "`" + st + "`"
   def singleQuote(st: String): String = "'" + st.replaceAll("'", "''") + "'"
 
   def spaced: Boolean = queryString.endsWith(" ")
@@ -64,16 +63,18 @@ case class SQLBuiltQuery(queryString: String) {
   def wrapn[M[X] <: TraversableOnce[X]](
     col: M[String],
     sep: String = defaultSep
-  ): SQLBuiltQuery = wrapn(col.mkString(sep))
+  ): SQLBuiltQuery = wrapn(col mkString sep)
 
   def wrap[M[X] <: TraversableOnce[X]](
     col: M[String],
     sep: String = defaultSep
   ): SQLBuiltQuery = wrap(col.mkString(sep))
 
-  def wrapEscape(list: List[String]): SQLBuiltQuery = wrap(list.map(escape).mkString(", "))
+  def wrapEscape(list: List[String]): SQLBuiltQuery = wrap(list.map(SQLBuiltQuery.escape).mkString(", "))
 }
 
 object SQLBuiltQuery {
   def empty: SQLBuiltQuery = SQLBuiltQuery("")
+
+  def escape(st: String): String = "`" + st + "`"
 }

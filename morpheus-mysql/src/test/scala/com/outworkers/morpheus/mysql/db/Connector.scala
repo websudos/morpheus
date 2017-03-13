@@ -38,7 +38,7 @@ object Connector {
 
   private[this] val databaseName = "morpheus_test"
   private[this] val user = if (isRunningUnderTravis) "travis" else "root"
-  private[this] val pwd = if (isRunningUnderTravis) "morpheus23!" else ""
+  private[this] val pwd = "morpheus23!"
 
   /**
    * This client is meant to connect to the Travis CI default MySQL service.

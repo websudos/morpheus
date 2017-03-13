@@ -109,8 +109,6 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
   it should "serialize and deserialize a DateTime" in {
     val primitive = new DefaultDateTimePrimitive
 
-    implicit val dateSampler: Arbitrary[DateTime] = Sample.arbitrary[DateTime]
-
     forAll { value: DateTime =>
 
       val row = new TestRow {
@@ -131,9 +129,10 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def string(name: String): Try[String] = Success(value)
       }
 
-      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escape(value)
+      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value)
 
       primitive.deserialize(row, "") shouldEqual Success(value)
     }
   }
 }
+

@@ -41,6 +41,8 @@ trait DataTypes {
 
   implicit object DateTimePrimitive extends DefaultDateTimePrimitive
 
+  implicit object TimeStampPrimitive extends DefaultTimestampPrimitive
+
   implicit object ShortPrimitive extends DefaultShortPrimitive
 
   implicit object StringPrimitive extends DefaultStringPrimitive
