@@ -24,7 +24,6 @@ import com.outworkers.morpheus.{CustomSamplers, DataType}
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{Assertion, FlatSpec, Matchers, TryValues}
 import com.twitter.finagle.exp.mysql._
-import org.joda.time.{DateTime, DateTimeZone}
 import org.scalacheck.Arbitrary
 
 class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks with CustomSamplers with TryValues {
@@ -71,26 +70,15 @@ class DatatypesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyC
 
   it should "parse a Date from a row" in {
     val dt = DataType[Date]
-    val date = new DateTime(DateTimeZone.UTC).toDate
-    val value = DateValue(date.asSql)
-
-    val row = Row(new EmptyRow(_ => Some(value)))
-    /*
-    dt.deserialize(row, "d").success.value.getTime shouldEqual date.getTime
-
 
     forAll { (date: Date, column: String) =>
       val value = DateValue(date.asSql)
 
-      val row = Row(new EmptyRow {
-        override def apply(columnName: String): Option[Value] = Some(value)
-      })
-
-      Console.println(s"Input: ${date.getTime} Parsed: ${dt.deserialize(row, column).success.value.getTime}")
+      val row = Row(new EmptyRow(_ => Some(value)))
 
       dt.serialize(date) shouldEqual date.toString
       dt.deserialize(row, column).success.value.getTime shouldEqual date.getTime
-    }*/
+    }
   }
 
   ignore should "parse an SqlDate from a row" in {

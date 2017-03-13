@@ -45,7 +45,7 @@ trait Row {
   def sqlDate(name: String): Try[SqlDate]
 
   def datetime(name: String): Try[DateTime] = date(name) map {
-    d => new DateTime(d.toInstant.getEpochSecond, DateTimeZone.UTC)
+    d => new DateTime(d.getTime, DateTimeZone.UTC)
   }
 
   def float(name: String): Try[Float]
