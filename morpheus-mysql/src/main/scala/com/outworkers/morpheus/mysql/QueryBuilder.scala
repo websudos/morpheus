@@ -38,54 +38,58 @@ case class Row(res: FinagleRow) extends BaseRow {
     Failure(new RuntimeException(msg))
   }
 
+  def failWith[T](name: String, value: Any): Failure[T] = {
+    failWith(s"Invalid value $name for column $name, got $value")
+  }
+
   protected[this] def extract[T](column: String)(fn: Option[Value] => Try[T]): Try[T] = fn(res(column))
 
   override def string(name: String): Try[String] = {
     extract(name) {
       case Some(StringValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected string, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def byte(name: String): Try[Byte] = {
     extract(name) {
       case Some(ByteValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected byte, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def int(name: String): Try[Int] = {
     extract(name) {
       case Some(IntValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected int, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def date(name: String): Try[Date] = {
     extract(name) {
       case Some(DateValue(value)) => Success(new Date(value.getTime))
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected int, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def bigDecimal(name: String): Try[BigDecimal] = {
     extract(name) {
       case Some(BigDecimalValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected BigDecimal, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def double(name: String): Try[Double] = {
     extract(name) {
       case Some(DoubleValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected double, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def float(name: String): Try[Float] = {
     extract(name) {
       case Some(FloatValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected float, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
@@ -93,14 +97,14 @@ case class Row(res: FinagleRow) extends BaseRow {
     extract(name) {
       case Some(LongValue(value)) => Success(value)
       case Some(StringValue(value)) => Try(java.lang.Long.parseLong(value))
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected long, got $x")
+      case x @ _ => failWith(s"Invalid value for column $name, expected long, got $x")
     }
   }
 
   override def short(name: String): Try[Short] = {
     extract(name) {
       case Some(ShortValue(value)) => Success(value)
-      case x @ _ => Failure(new Exception(s"Invalid value $name for column $name, expected short, got $x"))
+      case x @ _ => failWith(name, x)
     }
   }
 
@@ -108,28 +112,28 @@ case class Row(res: FinagleRow) extends BaseRow {
     extract(name) {
       case Some(fsql.StringValue("true")) => Success(true)
       case Some(fsql.StringValue("false")) => Success(false)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected boolean, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def byteBuffer(name: String): Try[ByteBuffer] = {
     extract(name) {
       case Some(fsql.RawValue(typ, charset, isBinary, bytes)) => Success(ByteBuffer.wrap(bytes))
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected ByteArray, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def sqlDate(name: String): Try[SqlDate] = {
     extract(name) {
       case Some(DateValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected int, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 
   override def timestamp(name: String): Try[Timestamp] = {
     extract(name) {
       case Some(TimestampValue(value)) => Success(value)
-      case x @ _ => failWith(s"Invalid value $name for column $name, expected int, got $x")
+      case x @ _ => failWith(name, x)
     }
   }
 }

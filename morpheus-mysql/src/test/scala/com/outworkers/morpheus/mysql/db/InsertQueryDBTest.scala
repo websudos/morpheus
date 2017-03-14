@@ -15,20 +15,22 @@
  */
 package com.outworkers.morpheus.mysql.db
 
+import com.outworkers.morpheus.CustomSamplers
 import com.outworkers.morpheus.mysql.dsl._
 import com.outworkers.morpheus.mysql.tables.{BasicRecord, BasicTable, PrimitiveRecord, PrimitivesTable}
-import com.outworkers.util.testing._
+import com.outworkers.util.samplers._
+import com.outworkers.util.testing.DateTimeSampler
 import org.scalatest.FlatSpec
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class InsertQueryDBTest extends FlatSpec with BaseSuite {
+class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenPropertyChecks with CustomSamplers {
 
   override def beforeAll(): Unit = {
     super.beforeAll()
     Await.result(BasicTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
-    Console.println(PrimitivesTable.create.ifNotExists.engine(InnoDB).queryString)
     Await.result(PrimitivesTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
   }
 
@@ -46,21 +48,23 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite {
   }
 
   it should "insert and select a record with all the primitive types in MySQL" in {
-    val sample = gen[PrimitiveRecord]
 
-    val chain = for {
-      store <- PrimitivesTable.store(sample).future()
-      one <- PrimitivesTable.select.where(_.id eqs sample.id).one()
-    } yield one
+    forAll { (fl: Float, sample: PrimitiveRecord) =>
 
-    whenReady(chain) { res =>
-      res.value.id shouldEqual sample.id
-      res.value.double shouldEqual sample.double
-      res.value.float shouldEqual sample.float
-      res.value.long shouldEqual sample.long
-      res.value.str shouldEqual sample.str
-      // res.value.datetime shouldEqual sample.datetime
-      // res.value.date shouldEqual sample.date
+      val chain = for {
+        store <- PrimitivesTable.store(sample).future()
+        one <- PrimitivesTable.select.where(_.id eqs sample.id).one()
+      } yield one
+
+      whenReady(chain) { res =>
+        res.value.id shouldEqual sample.id
+        res.value.double shouldEqual sample.double
+        res.value.long shouldEqual sample.long
+        res.value.str shouldEqual sample.str
+        res.value.float shouldEqual sample.float
+        // res.value.datetime shouldEqual sample.datetime
+        // res.value.date shouldEqual sample.date
+      }
     }
   }
 }

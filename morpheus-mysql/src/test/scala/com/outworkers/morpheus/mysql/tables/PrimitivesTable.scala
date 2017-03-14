@@ -47,13 +47,15 @@ case class PrimitiveRecord(
 class PrimitivesTable extends Table[PrimitivesTable, PrimitiveRecord] {
   object id extends IntColumn(this) with PrimaryKey with Autoincrement with NotNull
   object num extends IntColumn(this)
-  object double extends DoubleColumn(this)
-  object float extends FloatColumn(this)
-  object real extends RealColumn(this)
-  object long extends LongColumn(this)
-  object date extends DateColumn(this)
-  object datetime extends DateTimeColumn(this)
-  object str extends VarcharColumn(this, 256)
+  object doubleColumn extends DoubleColumn(this)
+  object floatColumn extends FloatColumn(this, 10)
+  object realColumn extends RealColumn(this)
+  object longColumn extends LongColumn(this)
+  object dateColumn extends DateColumn(this)
+  object datetimeColumn extends DateTimeColumn(this)
+  object strColumn extends VarcharColumn(this, 256)
+
+  override def tableName: String = "primitives_table"
 
   /**
     * The most notable and honorable of functions in this file, this is what allows our DSL to provide type-safety.
@@ -69,13 +71,13 @@ class PrimitivesTable extends Table[PrimitivesTable, PrimitiveRecord] {
     PrimitiveRecord(
       id(row),
       num(row),
-      double(row),
-      real(row),
-      float(row),
-      long(row),
-      date(row),
-      datetime(row),
-      str(row)
+      doubleColumn(row),
+      realColumn(row),
+      floatColumn(row),
+      longColumn(row),
+      dateColumn(row),
+      datetimeColumn(row),
+      strColumn(row)
     )
   }
 
@@ -83,13 +85,13 @@ class PrimitivesTable extends Table[PrimitivesTable, PrimitiveRecord] {
     insert
       .value(_.id, rec.id)
       .value(_.num, rec.num)
-      .value(_.double, rec.double)
-      .value(_.real, rec.real)
-      .value(_.float, rec.float)
-      .value(_.long, rec.long)
-      .value(_.date, rec.date)
-      .value(_.datetime, rec.dateTime)
-      .value(_.str, rec.str)
+      .value(_.doubleColumn, rec.double)
+      .value(_.realColumn, rec.real)
+      .value(_.floatColumn, rec.float)
+      .value(_.longColumn, rec.long)
+      .value(_.dateColumn, rec.date)
+      .value(_.datetimeColumn, rec.dateTime)
+      .value(_.strColumn, rec.str)
   }
 }
 

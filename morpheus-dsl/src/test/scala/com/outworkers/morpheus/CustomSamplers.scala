@@ -21,12 +21,16 @@ import java.util.Date
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalacheck.{Arbitrary, Gen}
 
+import scala.math.BigDecimal.RoundingMode
+
 trait CustomSamplers {
   val offset = 10000
 
   implicit val dateGen: Arbitrary[Date] = Arbitrary(Gen.delay(new Date(new DateTime(DateTimeZone.UTC).getMillis)))
 
   implicit val sqlDateGen: Arbitrary[SqlDate] = Arbitrary(Gen.delay(new SqlDate(new DateTime(DateTimeZone.UTC).getMillis)))
+
+  implicit val floatGen: Arbitrary[Float] = Arbitrary(Arbitrary.arbFloat.arbitrary.map(fl => BigDecimal(fl).setScale(2, RoundingMode.HALF_UP).toFloat))
 
   implicit val jodaGen: Arbitrary[DateTime] = Arbitrary {
     for {

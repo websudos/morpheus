@@ -107,7 +107,7 @@ private[morpheus] trait TimePrimitive {
 class DefaultLongPrimitive extends DataType[Long] {
   override def sqlType: String = DefaultSQLDataTypes.long
 
-  override def serialize(value: Long): String = DefaultQueryBuilder.escapeValue(value.toString)
+  override def serialize(value: Long): String = value.toString
 
   def deserialize(row: Row, name: String): Try[Long] = row.long(name)
 }
