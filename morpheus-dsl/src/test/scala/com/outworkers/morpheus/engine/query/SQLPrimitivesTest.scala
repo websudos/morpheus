@@ -132,7 +132,7 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def datetime(name: String): Try[DateTime] = Success(value)
       }
 
-      ev.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value.toString(ev.jodaDateFormat))
+      ev.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value.toString(ev.jodaDateTimeFormat))
 
       ev.deserialize(row, "") shouldEqual Success(value)
     }

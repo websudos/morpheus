@@ -32,13 +32,13 @@ class InsertQuerySerialisationTest extends FlatSpec with Matchers {
   it should "serialise an INSERT query with a single value defined" in {
     BasicTable.insert
       .value(_.count, 5L)
-      .queryString shouldEqual "INSERT INTO `BasicTable` (count) VALUES(5);"
+      .queryString shouldEqual "INSERT INTO `BasicTable` (`count`) VALUES(5);"
   }
 
   it should "serialise an INSERT query with multiple values defined" in {
     BasicTable.insert
       .value(_.count, 5L)
       .value(_.name, "test")
-      .queryString shouldEqual "INSERT INTO `BasicTable` (count, name) VALUES(5, 'test');"
+      .queryString shouldEqual "INSERT INTO `BasicTable` (`count`, `name`) VALUES(5, 'test');"
   }
 }
