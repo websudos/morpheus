@@ -34,6 +34,8 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenProp
     Await.result(PrimitivesTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
   }
 
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration = PropertyCheckConfiguration(minSuccessful = 5)
+
   it should "store a record in the database and retrieve it by id" in {
     val sample = gen[BasicRecord]
 
@@ -49,10 +51,11 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenProp
 
   it should "insert and select a record with all the primitive types in MySQL" in {
 
-    forAll { (fl: Float, sample: PrimitiveRecord) =>
+    forAll { fl: Float =>
+      val sample = gen[PrimitiveRecord].copy(float = fl)
 
       val chain = for {
-        store <- PrimitivesTable.store(sample).future()
+        store <- PrimitivesTable.store(sample.copy(float = fl)).future()
         one <- PrimitivesTable.select.where(_.id eqs sample.id).one()
       } yield one
 
@@ -61,7 +64,7 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenProp
         res.value.double shouldEqual sample.double
         res.value.long shouldEqual sample.long
         res.value.str shouldEqual sample.str
-        res.value.float shouldEqual sample.float
+        res.value.float shouldEqual fl
         // res.value.datetime shouldEqual sample.datetime
         // res.value.date shouldEqual sample.date
       }

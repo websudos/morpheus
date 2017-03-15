@@ -42,12 +42,12 @@ class CreateQueryTest extends FlatSpec with Matchers {
   }
 
   it should "serialise a complete table definition when an engine is specified" in {
-    BasicTable.create.engine(InnoDB).queryString shouldEqual "CREATE TABLE `BasicTable` (name TEXT, count LONG) ENGINE InnoDB;"
+    BasicTable.create.engine(InnoDB).queryString shouldEqual "CREATE TABLE `BasicTable` (`name` TEXT, `count` LONG) ENGINE InnoDB;"
   }
 
   it should "serialise a complete table definition with an IF NOT EXSITS clause when an engine is specified" in {
     BasicTable.create.ifNotExists.engine(InnoDB)
-      .queryString shouldEqual "CREATE TABLE IF NOT EXISTS `BasicTable` (name TEXT, count LONG) ENGINE InnoDB;"
+      .queryString shouldEqual "CREATE TABLE IF NOT EXISTS `BasicTable` (`name` TEXT, `count` LONG) ENGINE InnoDB;"
   }
 
 

@@ -39,13 +39,13 @@ class InsertQueryTest extends FlatSpec with Matchers {
   }
 
   it should "serialise an INSERT value query with a single value clause" in {
-    BasicTable.insert.value(_.name, "test").queryString shouldEqual "INSERT INTO `BasicTable` (name) VALUES('test');"
+    BasicTable.insert.value(_.name, "test").queryString shouldEqual "INSERT INTO `BasicTable` (`name`) VALUES('test');"
   }
 
   it should "serialise an INSERT value query with a multiple value clauses" in {
     val num = gen[Int]
     BasicTable.insert.value(_.name, "test").value(_.count, num)
-      .queryString shouldEqual s"INSERT INTO `BasicTable` (name, count) VALUES('test', $num);"
+      .queryString shouldEqual s"INSERT INTO `BasicTable` (`name`, `count`) VALUES('test', $num);"
   }
 
 }

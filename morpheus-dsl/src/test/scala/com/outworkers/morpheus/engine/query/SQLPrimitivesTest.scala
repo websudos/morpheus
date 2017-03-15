@@ -20,16 +20,33 @@ import java.sql.Date
 import com.outworkers.morpheus._
 import com.outworkers.morpheus.builder.DefaultQueryBuilder
 import com.outworkers.morpheus.helpers.TestRow
-import com.outworkers.util.samplers.Sample
+import com.outworkers.morpheus.sql._
 import com.outworkers.util.testing._
 import org.joda.time.DateTime
-import org.scalacheck.Arbitrary
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
 
 import scala.util.{Success, Try}
 
 class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPropertyChecks with CustomSamplers {
+
+  "The SQL String primitive" should "always use '(apostrophes) around the serialised strings" in {
+    val name = gen[ShortString].value
+    val query = DataType[String].serialize(name)
+    query shouldEqual s"'$name'"
+  }
+
+  "The SQL Long primitive" should "serialise a Long value to its string value" in {
+    val value = gen[Long]
+    val query = DataType[Long].serialize(value)
+    query shouldEqual s"${value.toString}"
+  }
+
+  "The SQL Int primitive" should "serialise a Int value to its string value" in {
+    val value = gen[Int]
+    val query = DataType[Int].serialize(value)
+    query shouldEqual s"${value.toString}"
+  }
 
   it should "serialize and deserialize an Int" in {
     val primitive = new DefaultIntPrimitive
@@ -55,7 +72,7 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def double(name: String): Try[Double] = Success(value)
       }
 
-      primitive.serialize(value) shouldEqual value.toString
+      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value.toString)
 
       primitive.deserialize(row, "") shouldEqual Success(value)
     }
@@ -70,7 +87,7 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def float(name: String): Try[Float] = Success(value)
       }
 
-      primitive.serialize(value) shouldEqual value.toString
+      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value.toString)
 
       primitive.deserialize(row, "") shouldEqual Success(value)
     }
@@ -100,14 +117,14 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def date(name: String): Try[Date] = Success(value)
       }
 
-      primitive.serialize(value) shouldEqual value.toString
+      primitive.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(primitive.javaDateFormat.format(value))
 
       primitive.deserialize(row, "") shouldEqual Success(value)
     }
   }
 
   it should "serialize and deserialize a DateTime" in {
-    val primitive = new DefaultDateTimePrimitive
+    val ev = new DefaultDateTimePrimitive
 
     forAll { value: DateTime =>
 
@@ -115,9 +132,9 @@ class SQLPrimitivesTest extends FlatSpec with Matchers with GeneratorDrivenPrope
         override def datetime(name: String): Try[DateTime] = Success(value)
       }
 
-      primitive.serialize(value) shouldEqual value.toString
+      ev.serialize(value) shouldEqual DefaultQueryBuilder.escapeValue(value.toString(ev.jodaDateFormat))
 
-      primitive.deserialize(row, "") shouldEqual Success(value)
+      ev.deserialize(row, "") shouldEqual Success(value)
     }
   }
 

@@ -22,40 +22,39 @@ import com.outworkers.morpheus.tables.NumericsTable
 class NumericColumnsSerialisationTest extends FlatSpec with Matchers {
 
   it should "serialise a simple TinyIntColumn definition to an SQL query without a limit set" in {
-    NumericsTable.tinyInt.qb.queryString shouldEqual "tinyInt TINYINT"
+    NumericsTable.tinyInt.qb.queryString shouldEqual "`tinyInt` TINYINT"
   }
 
   it should "serialise a limited TinyIntColumn definition to an SQL query with a limit set" in {
-    NumericsTable.tinyIntLimited.qb.queryString shouldEqual "tinyIntLimited TINYINT(100)"
+    NumericsTable.tinyIntLimited.qb.queryString shouldEqual "`tinyIntLimited` TINYINT(100)"
   }
 
   it should "serialise a simple SmallIntColumn definition to an SQL query without a limit set" in {
-    NumericsTable.smallInt.qb.queryString shouldEqual "smallInt SMALLINT"
+    NumericsTable.smallInt.qb.queryString shouldEqual "`smallInt` SMALLINT"
   }
 
   it should "serialise a limited SmallIntColumn definition to an SQL query with a limit set" in {
-    NumericsTable.smallIntLimited.qb.queryString shouldEqual "smallIntLimited SMALLINT(100)"
+    NumericsTable.smallIntLimited.qb.queryString shouldEqual "`smallIntLimited` SMALLINT(100)"
   }
 
   it should "serialise a simple MediumIntColumn definition to an SQL query without a limit set" in {
-    NumericsTable.mediumInt.qb.queryString shouldEqual "mediumInt MEDIUMINT"
+    NumericsTable.mediumInt.qb.queryString shouldEqual "`mediumInt` MEDIUMINT"
   }
 
   it should "serialise a limited MediumIntColumn definition to an SQL query with a limit set" in {
-    NumericsTable.mediumIntLimited.qb.queryString shouldEqual "mediumIntLimited MEDIUMINT(100)"
+    NumericsTable.mediumIntLimited.qb.queryString shouldEqual "`mediumIntLimited` MEDIUMINT(100)"
   }
 
   it should "serialise a simple IntColumn definition to an SQL query without a limit set" in {
-    NumericsTable.int.qb.queryString shouldEqual "int INT"
+    NumericsTable.int.qb.queryString shouldEqual "`int` INT"
   }
 
   it should "serialise a limited IntColumn definition to an SQL query with a limit set" in {
-    NumericsTable.intLimited.qb.queryString shouldEqual "intLimited INT(100)"
+    NumericsTable.intLimited.qb.queryString shouldEqual "`intLimited` INT(100)"
   }
 
-
   it should "serialise a year column definition" in {
-    NumericsTable.yearCol.qb.queryString shouldEqual "yearCol YEAR"
+    NumericsTable.yearCol.qb.queryString shouldEqual "`yearCol` YEAR"
   }
 
 }

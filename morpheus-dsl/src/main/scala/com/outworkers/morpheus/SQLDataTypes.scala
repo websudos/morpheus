@@ -98,10 +98,10 @@ class DefaultDoublePrimitive extends DataType[Double] {
 }
 
 private[morpheus] trait TimePrimitive {
-  protected[this] val mysqlDatePattern = "yyyy-MM-dd"
-  protected[this] val javaDateFormat = new SimpleDateFormat(mysqlDatePattern)
-  protected[this] val jodaDateFormat = DateTimeFormat.forPattern(mysqlDatePattern)
-  protected[this] val jodaDateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+  protected[morpheus] val mysqlDatePattern = "yyyy-MM-dd"
+  protected[morpheus] val javaDateFormat = new SimpleDateFormat(mysqlDatePattern)
+  protected[morpheus] val jodaDateFormat = DateTimeFormat.forPattern(mysqlDatePattern)
+  protected[morpheus] val jodaDateTimeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 }
 
 class DefaultLongPrimitive extends DataType[Long] {
@@ -139,7 +139,7 @@ class DefaultTimestampPrimitive extends DataType[SqlTimestamp] with TimePrimitiv
 
 
 class DefaultDateTimePrimitive extends DataType[DateTime] with TimePrimitive {
-  def sqlType: String = DefaultSQLDataTypes.dateTime
+  def sqlType: String = DefaultSQLDataTypes.timestamp
 
   def serialize(value: DateTime): String = DefaultQueryBuilder.escapeValue(value.toString(jodaDateTimeFormat))
 
