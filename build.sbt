@@ -62,19 +62,8 @@ val liftVersion: String => String = {
   }
 }
 
-val bintrayPublishing: Seq[Def.Setting[_]] = Seq(
-  publishMavenStyle := true,
-  bintrayOrganization := Some("outworkers"),
-  bintrayRepository := "oss-releases",
-  bintrayReleaseOnPublish := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := { _ => true },
-  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))
-)
-
 val sharedSettings: Seq[Def.Setting[_]] = Seq(
   organization := "com.outworkers",
-  version := "0.3.0",
   scalaVersion := "2.11.8",
   crossScalaVersions := Seq("2.10.6", "2.11.8"),
   resolvers ++= Seq(
@@ -97,7 +86,7 @@ val sharedSettings: Seq[Def.Setting[_]] = Seq(
   ),
   fork in Test := true,
   javaOptions in Test ++= Seq("-Xmx2G")
-) ++ bintrayPublishing ++
+) ++ Publishing.effectiveSettings ++
   VersionManagement.newSettings ++
   GitProject.gitSettings
 
