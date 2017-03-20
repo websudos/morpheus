@@ -1,6 +1,6 @@
 morpheus [![Build Status](https://travis-ci.org/outworkers/morpheus.svg)](https://travis-ci.org/outworkers/morpheus) [![Coverage Status](https://coveralls.io/repos/outworkers/morpheus/badge.svg?branch=develop&service=github)](https://coveralls.io/github/outworkers/morpheus?branch=develop) [![Bintray](https://api.bintray.com/packages/outworkers/oss-releases/morpheus-mysql/images/download.svg) ](https://bintray.com/outworkers/oss-releases/morpheus-mysql/_latestVersion)
 
-========================================================================================================================================================================================================================
+==============================================================
 
 ![morpheus](https://s3-eu-west-1.amazonaws.com/websudos/oss/logos/morpheus.png "Outworkers Morpheus")
 
@@ -68,7 +68,7 @@ but it's a standard thing as far as MySQL is concerned.
 
 Here's how Morpheus operates:
 
-If you change the top level import to: ```com.websudos.morpheus.postgres._``` and you try to compile the same ```distinctRow``` query. But there
+If you change the top level import to: ```com.outworkers.morpheus.postgres._``` and you try to compile the same ```distinctRow``` query. But there
 will be none. The method will simply not exist. Morpheus has now auto-magically performed a full feature swap,
 changed communication protocol and all underlying settings, and all you get now is Postgres features.
 
@@ -91,11 +91,11 @@ If you are using MySQL, you would simply use the following:
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.websudos"  %% "morpheus-mysql"                % morpheusVersion
+  "com.outworkers"  %% "morpheus-mysql"                % morpheusVersion
 )
 ```
 
-And then you can: ```import com.websudos.morpheus.mysql._```, which will give you the full set of MySQL methods and features without any overlaps or
+And then you can: ```import com.outworkers.morpheus.mysql._```, which will give you the full set of MySQL methods and features without any overlaps or
 unsupported operations. Morpheus guarantees you can almost never write an invalid SQL query unless you try really really hard.
 
 
@@ -106,9 +106,9 @@ The full list of available modules is:
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.websudos"  %% "morpheus-dsl"                  % morpheusVersion,
-  "com.websudos"  %% "morpheus-mysql"                % morpheusVersion,
-  "com.websudos"  %% "morpheus-postgres"             % morpheusVersion
+  "com.outworkers"  %% "morpheus-dsl"                  % morpheusVersion,
+  "com.outworkers"  %% "morpheus-mysql"                % morpheusVersion,
+  "com.outworkers"  %% "morpheus-postgres"             % morpheusVersion
 )
 ```
 
