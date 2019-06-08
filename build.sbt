@@ -30,7 +30,7 @@
 import com.twitter.sbt.{GitProject, VersionManagement}
 
 lazy val Versions = new {
-  val util = "0.30.1"
+  val util = "0.50.0"
   val spark = "1.2.1"
   val FinaglePostgres = "0.1.0"
   val shapeless = "2.3.2"
@@ -97,8 +97,7 @@ lazy val morpheus = (project in file("."))
     moduleName := "morpheus"
   ).aggregate(
     morpheusDsl,
-    morpheusMySQL,
-    morpheusTestkit
+    morpheusMySQL
   )
 
   lazy val morpheusDsl = (project in file("morpheus-dsl"))
@@ -115,8 +114,6 @@ lazy val morpheus = (project in file("."))
         "org.joda" % "joda-convert" % Versions.jodaConvert,
         "net.liftweb" %% "lift-json" % liftVersion(scalaVersion.value) % Test
       )
-    ).dependsOn(
-      morpheusTestkit % Test
     )
 
   lazy val morpheusMySQL = (project in file("morpheus-mysql"))
@@ -128,18 +125,5 @@ lazy val morpheus = (project in file("."))
         "com.twitter" %% "finagle-mysql" % Versions.finagle(scalaVersion.value)
       )
     ).dependsOn(
-      morpheusDsl % "compile->compile;test->test;",
-      morpheusTestkit % Test
+      morpheusDsl % "compile->compile;test->test;"
     )
-
-  lazy val morpheusTestkit = (project in file("morpheus-testkit"))
-    .settings(sharedSettings: _*)
-    .settings(
-    name := "morpheus-testkit",
-    libraryDependencies ++= Seq(
-      "com.h2database"                   % "h2"                        % "1.4.181",
-      "com.outworkers"                   %% "util-testing"             % Versions.util excludeAll {
-        ExclusionRule("org.scala-lang", "scala-reflect")
-      }
-    )
-  )
