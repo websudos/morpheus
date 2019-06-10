@@ -25,7 +25,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import com.twitter.sbt.{GitProject, VersionManagement}
+import Publishing.{ciSkipSequence, pgpPass, releaseTutFolder, runningUnderCi}
+import sbtrelease.ReleaseStateTransformations._
 
 lazy val Versions = new {
   val util = "0.50.0"
@@ -84,9 +85,28 @@ val sharedSettings: Seq[Def.Setting[_]] = Seq(
   ),
   fork in Test := true,
   javaOptions in Test ++= Seq("-Xmx2G")
-) ++ Publishing.effectiveSettings ++
-  VersionManagement.newSettings ++
-  GitProject.gitSettings
+) ++ Publishing.effectiveSettings ++ releaseSettings
+
+val releaseSettings = Seq(
+  releaseTutFolder := baseDirectory.value / "docs",
+  releaseIgnoreUntrackedFiles := true,
+  releaseVersionBump := sbtrelease.Version.Bump.Minor,
+  releaseTagComment := s"Releasing ${(version in ThisBuild).value} $ciSkipSequence",
+  releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value} $ciSkipSequence",
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    releaseStepTask((tut in Tut) in readme),
+    setReleaseVersion,
+    Publishing.commitTutFilesAndVersion,
+    releaseStepCommandAndRemaining("such publishSigned"),
+    releaseStepCommandAndRemaining("sonatypeReleaseAll"),
+    tagRelease,
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  )
+)
 
 lazy val morpheus = (project in file("."))
   .settings(sharedSettings: _*)
