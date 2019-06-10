@@ -17,6 +17,5 @@ Changelog
 - Added the new scoverage resolver to `plugins.sbt`.
 - Settings MySQL password in Travis CI manually. Authentication without password doesn't work.
 - Bumped `finagle-mysql` version to `6.28.0`.
-- Updated copyright version to the Websudos proprietary license.
 - Updated travis script to include `sbt-coveralls` execution.
 - Updated Travis configuration to include caching the build directory and account for Scala versions.
