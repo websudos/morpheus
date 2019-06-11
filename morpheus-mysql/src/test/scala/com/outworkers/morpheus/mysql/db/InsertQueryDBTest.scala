@@ -19,13 +19,13 @@ import com.outworkers.morpheus.CustomSamplers
 import com.outworkers.morpheus.mysql.dsl._
 import com.outworkers.morpheus.mysql.tables.{BasicRecord, BasicTable, PrimitiveRecord, PrimitivesTable}
 import com.outworkers.util.samplers._
-import com.outworkers.util.testing.DateTimeSampler
 import org.scalatest.FlatSpec
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.math.BigDecimal.RoundingMode
+import org.joda.time.{ DateTime, DateTimeZone }
 
 class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenPropertyChecks with CustomSamplers {
 
@@ -33,6 +33,10 @@ class InsertQueryDBTest extends FlatSpec with BaseSuite with GeneratorDrivenProp
     super.beforeAll()
     Await.result(BasicTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
     Await.result(PrimitivesTable.create.ifNotExists.engine(InnoDB).future(), 3.seconds)
+  }
+
+  implicit val datetimeSampler = new Sample[DateTime] {
+    override def sample: DateTime = DateTime.now(DateTimeZone.UTC)
   }
 
   it should "store a record in the database and retrieve it by id" in {

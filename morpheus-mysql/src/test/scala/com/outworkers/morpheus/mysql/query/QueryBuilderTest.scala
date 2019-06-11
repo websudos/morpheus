@@ -19,7 +19,7 @@ import com.outworkers.morpheus.mysql.QueryBuilder
 import com.outworkers.morpheus.builder.SQLBuiltQuery
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
-import com.outworkers.util.testing._
+import com.outworkers.util.samplers._
 
 class QueryBuilderTest extends FlatSpec with Matchers {
 

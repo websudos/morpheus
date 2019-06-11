@@ -20,7 +20,7 @@ import com.outworkers.morpheus.mysql.dsl._
 import com.outworkers.morpheus.mysql.db.BaseSuite
 import com.outworkers.morpheus.mysql.tables.{EnumerationRecord, EnumerationTable, TestEnumeration}
 import com.outworkers.util.samplers.{Generators, Sample}
-import com.outworkers.util.testing._
+import com.outworkers.util.samplers._
 import org.scalatest.FlatSpec
 
 import scala.concurrent.Await

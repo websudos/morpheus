@@ -16,7 +16,7 @@
 package com.outworkers.morpheus.mysql.db
 
 import com.outworkers.morpheus.mysql.tables.{BasicRecord, BasicTable}
-import com.outworkers.util.testing._
+import com.outworkers.util.samplers._
 import com.outworkers.morpheus.mysql.dsl._
 import org.scalatest.FlatSpec
 
