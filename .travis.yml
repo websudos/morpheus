@@ -6,9 +6,11 @@ cache:
   - $HOME/.ivy2/cache
   - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
 sudo: false
+
 scala:
 - 2.10.6
-- 2.11.8
+- 2.11.12
+
 env:
   global:
   - GH_REF: github.com/outworkers/morpheus.git
@@ -24,9 +26,10 @@ branches:
   only:
   - master
   - develop
+
 jdk:
-- oraclejdk9
 - oraclejdk8
+
 before_script:
 - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
 - mysql -e "CREATE DATABASE morpheus_test;"
