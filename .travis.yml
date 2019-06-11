@@ -25,7 +25,7 @@ branches:
   - master
   - develop
 jdk:
-- oraclejdk7
+- oraclejdk9
 - oraclejdk8
 before_script:
 - travis_retry sbt ++$TRAVIS_SCALA_VERSION update
