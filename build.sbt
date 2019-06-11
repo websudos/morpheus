@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-import Publishing.{ciSkipSequence, pgpPass, releaseTutFolder, runningUnderCi}
+import Publishing.{ciSkipSequence, releaseTutFolder}
 import sbtrelease.ReleaseStateTransformations._
 
 lazy val Versions = new {
@@ -37,7 +37,9 @@ lazy val Versions = new {
   val lift = "3.0"
   val slf4j = "1.7.21"
   val joda = "2.9.4"
+  val scalatest = "3.0.5"
   val jodaConvert = "1.8.1"
+  val scalacheck = "1.14.0"
 
   val finagle: String => String = { s =>
     CrossVersion.partialVersion(s) match {
@@ -124,12 +126,14 @@ lazy val morpheus = (project in file("."))
       moduleName := "morpheus-dsl",
       libraryDependencies ++= Seq(
         "com.twitter" %% "util-core" % Versions.twitterUtil(scalaVersion.value),
-        "com.outworkers" %% "diesel-reflection" % Versions.diesel,
         "org.slf4j" % "slf4j-api" % Versions.slf4j,
         "com.chuusai" %% "shapeless" % Versions.shapeless,
         "joda-time" % "joda-time" % Versions.joda,
         "org.joda" % "joda-convert" % Versions.jodaConvert,
-        "net.liftweb" %% "lift-json" % liftVersion(scalaVersion.value) % Test
+        "net.liftweb" %% "lift-json" % liftVersion(scalaVersion.value) % Test,
+        "com.outworkers"               %% "util-samplers"                     % Versions.util % Test,
+        "org.scalatest"                %% "scalatest"                         % Versions.scalatest % Test,
+        "org.scalacheck"               %% "scalacheck"                        % Versions.scalacheck % Test
       )
     )
 
@@ -139,7 +143,10 @@ lazy val morpheus = (project in file("."))
       moduleName := "morpheus-mysql",
       name := "morpheus-mysql",
       libraryDependencies ++= Seq(
-        "com.twitter" %% "finagle-mysql" % Versions.finagle(scalaVersion.value)
+        "com.twitter"                  %% "finagle-mysql"                     % Versions.finagle(scalaVersion.value),
+        "com.outworkers"               %% "util-samplers"                     % Versions.util % Test,
+        "org.scalatest"                %% "scalatest"                         % Versions.scalatest % Test,
+        "org.scalacheck"               %% "scalacheck"                        % Versions.scalacheck % Test
       )
     ).dependsOn(
       morpheusDsl % "compile->compile;test->test;"

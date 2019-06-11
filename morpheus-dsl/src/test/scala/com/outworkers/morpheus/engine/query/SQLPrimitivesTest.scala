@@ -21,7 +21,7 @@ import com.outworkers.morpheus._
 import com.outworkers.morpheus.builder.DefaultQueryBuilder
 import com.outworkers.morpheus.helpers.TestRow
 import com.outworkers.morpheus.sql._
-import com.outworkers.util.testing._
+import com.outworkers.util.samplers._
 import org.joda.time.DateTime
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FlatSpec, Matchers}
