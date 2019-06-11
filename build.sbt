@@ -85,8 +85,8 @@ lazy val releaseSettings = Seq(
 
 lazy val sharedSettings: Seq[Def.Setting[_]] = Seq(
   organization := "com.outworkers",
-  scalaVersion := "2.11.8",
-  crossScalaVersions := Seq("2.10.6", "2.11.8"),
+  scalaVersion := "2.11.12",
+  crossScalaVersions := Seq("2.10.6", "2.11.12"),
   resolvers ++= Seq(
     Resolver.typesafeRepo("releases"),
     Resolver.sonatypeRepo("releases"),
